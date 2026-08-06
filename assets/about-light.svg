@@ -38,12 +38,16 @@
     .line-2 { animation-delay: 120ms; }
     .line-3 { animation-delay: 240ms; }
     .line-4 { animation-delay: 360ms; }
+    .sweep { animation: sweep 4.6s cubic-bezier(0.45,0,0.55,1) infinite 800ms; }
+    .frame { animation: frame 6s ease-in-out infinite; }
     @keyframes float-a { 0%,100% { transform: translate(0,0); opacity: .58; } 50% { transform: translate(28px,-20px); opacity: .86; } }
     @keyframes float-b { 0%,100% { transform: translate(0,0); opacity: .42; } 50% { transform: translate(-24px,18px); opacity: .72; } }
     @keyframes float-c { 0%,100% { transform: translate(0,0) scale(1); opacity: .34; } 50% { transform: translate(18px,-12px) scale(1.18); opacity: .62; } }
     @keyframes ring { 0%,100% { opacity: .06; } 50% { opacity: .22; } }
     @keyframes cursor { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
     @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes sweep { 0% { stroke-dashoffset: 300; } 55%,100% { stroke-dashoffset: -240; } }
+    @keyframes frame { 0%,100% { stroke-opacity: 0.4; } 50% { stroke-opacity: 0.72; } }
   </style>
   <g>
     <rect width="860" height="240" rx="20" fill="url(#about-bg)"/>
@@ -59,7 +63,8 @@
         <animateTransform attributeName="transform" type="scale" values="0.85;1.2;0.85" dur="1.6s" repeatCount="indefinite"/>
       </circle>
     </g>
-    <rect x="26" y="24" width="808" height="192" rx="20" fill="rgba(255,255,255,0.62)" stroke="#0969da" stroke-opacity="0.4"/>
+    <rect class="frame" x="26" y="24" width="808" height="192" rx="20" fill="rgba(255,255,255,0.62)" stroke="#0969da" stroke-opacity="0.4"/>
+    <path class="sweep" d="M46 72 H 470" fill="none" stroke="#0969da" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-dasharray="72 360"/>
     <text x="48" y="60" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="11" font-weight="800" letter-spacing="4" fill="#57606a">ABOUT</text>
     <text class="line" x="46" y="96" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#1f2328">Full-Stack Developer specializing in Python, FastAPI, Next.js,</text>
     <text class="line line-2" x="46" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#1f2328">React, MySQL, and Computer Vision. Passionate about AI-driven</text>
