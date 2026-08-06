@@ -5,15 +5,17 @@
  * Hand-written / locally customized — never overwritten here:
  * - assets/social.svg, assets/social-light.svg
  * About cards keep their design; only the bio lines are refreshed from GitHub.
+ * Connect chips are regenerated from GitHub social_accounts (plus the profile URL).
  */
 
-import { writeFile, mkdir, readFile } from 'node:fs/promises';
+import { writeFile, mkdir, readFile, unlink } from 'node:fs/promises';
 
 const USERNAME = 'neelavradutta';
 const THEME = 'github-dark';
 const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
 const ABOUT_LINE_CHARS = 62;
+const MAX_CONNECT = 4;
 
 const HERO_HEIGHT = 176;
 const HERO_SHIFT = 6;
@@ -241,34 +243,23 @@ async function refresh(section, light) {
   console.log('updated', name);
 }
 
-await mkdir(OUT_DIR, { recursive: true });
-
-const failures = [];
-for (const section of SECTIONS) {
-  for (const light of [false, true]) {
-    try {
-      await refresh(section, light);
-    } catch (error) {
-      failures.push(error.message);
-      console.error('failed', error.message);
-    }
-  }
+function githubHeaders() {
+  const headers = { 'User-Agent': 'neelavradutta-profile-refresh', Accept: 'application/vnd.github+json' };
+  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  return headers;
 }
 
-try {
-  await refreshAbout();
-} catch (error) {
-  failures.push(error.message);
-  console.error('failed', error.message);
+function escapeXml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
-
-if (failures.length) process.exit(1);
 
 /** Fetches the live GitHub bio (same source GitSkins uses for profile copy). */
 async function fetchBio() {
-  const headers = { 'User-Agent': 'neelavradutta-profile-refresh', Accept: 'application/vnd.github+json' };
-  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
-  const response = await fetch(`https://api.github.com/users/${USERNAME}`, { headers });
+  const response = await fetch(`https://api.github.com/users/${USERNAME}`, { headers: githubHeaders() });
   if (!response.ok) throw new Error(`about: GitHub API HTTP ${response.status}`);
   const bio = (await response.json()).bio?.trim();
   if (!bio) throw new Error('about: GitHub bio is empty');
@@ -292,13 +283,7 @@ function wrapBio(bio) {
   }
   if (lines.length < 3 && current) lines.push(current);
   while (lines.length < 3) lines.push('');
-  return lines.slice(0, 3).map((line) =>
-    line
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;'),
-  );
+  return lines.slice(0, 3).map(escapeXml);
 }
 
 /** Updates only the three bio <text> nodes inside the hand-made About cards. */
@@ -317,3 +302,244 @@ async function refreshAbout() {
     console.log('updated', name);
   }
 }
+
+const ICONS = {
+  github: {
+    scale: 0.58,
+    path: 'M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z',
+  },
+  instagram: {
+    scale: 0.52,
+    path: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z',
+  },
+  leetcode: {
+    scale: 0.52,
+    path: 'M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z',
+  },
+  twitter: {
+    scale: 0.5,
+    path: 'M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z',
+  },
+  link: {
+    scale: 0.5,
+    path: 'M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71',
+  },
+};
+
+const PLATFORM_LABEL = {
+  github: 'GitHub',
+  instagram: 'Instagram',
+  leetcode: 'LeetCode',
+  twitter: 'Twitter',
+  linkedin: 'LinkedIn',
+  youtube: 'YouTube',
+  facebook: 'Facebook',
+  link: 'Link',
+};
+
+function detectPlatform(provider, rawUrl) {
+  const host = (() => {
+    try {
+      return new URL(rawUrl).hostname.replace(/^www\./, '').toLowerCase();
+    } catch {
+      return '';
+    }
+  })();
+  const p = (provider || '').toLowerCase();
+  if (p === 'twitter' || host === 'x.com' || host === 'twitter.com') return 'twitter';
+  if (p === 'instagram' || host === 'instagram.com') return 'instagram';
+  if (host === 'leetcode.com') return 'leetcode';
+  if (p === 'github' || host === 'github.com') return 'github';
+  if (p === 'linkedin' || host.includes('linkedin.com')) return 'linkedin';
+  if (p === 'youtube' || host.includes('youtube.com') || host === 'youtu.be') return 'youtube';
+  if (p === 'facebook' || host.includes('facebook.com')) return 'facebook';
+  return 'link';
+}
+
+function handleFromUrl(platform, rawUrl) {
+  let pathname = '/';
+  try {
+    pathname = new URL(rawUrl).pathname.replace(/\/+$/, '');
+  } catch {
+    /* keep default */
+  }
+  const parts = pathname.split('/').filter(Boolean);
+  let handle = parts.at(-1) || USERNAME;
+  if (platform === 'leetcode' && parts[0] === 'u' && parts[1]) handle = parts[1];
+  if (platform === 'github' && parts[0]) handle = parts[0];
+  const withAt = platform === 'leetcode' || platform === 'link' ? handle : `@${handle.replace(/^@/, '')}`;
+  return withAt.length > 16 ? withAt.slice(0, 15) + '…' : withAt;
+}
+
+async function fetchSocialLinks() {
+  const headers = githubHeaders();
+  const [userRes, socialRes] = await Promise.all([
+    fetch(`https://api.github.com/users/${USERNAME}`, { headers }),
+    fetch(`https://api.github.com/users/${USERNAME}/social_accounts`, { headers }),
+  ]);
+  if (!userRes.ok) throw new Error(`connect: profile HTTP ${userRes.status}`);
+  if (!socialRes.ok) throw new Error(`connect: social_accounts HTTP ${socialRes.status}`);
+
+  const user = await userRes.json();
+  const social = await socialRes.json();
+  const links = [{ url: user.html_url || `https://github.com/${USERNAME}`, provider: 'github' }];
+
+  for (const item of social) {
+    if (!item?.url) continue;
+    const normalized = item.url.replace(/\/+$/, '');
+    if (links.some((l) => l.url.replace(/\/+$/, '') === normalized)) continue;
+    links.push({ url: item.url, provider: item.provider || 'generic' });
+    if (links.length >= MAX_CONNECT) break;
+  }
+
+  if (links.length < MAX_CONNECT && user.blog?.trim()) {
+    let blog = user.blog.trim();
+    if (!/^https?:\/\//i.test(blog)) blog = `https://${blog}`;
+    const normalized = blog.replace(/\/+$/, '');
+    if (!links.some((l) => l.url.replace(/\/+$/, '') === normalized)) {
+      links.push({ url: blog, provider: 'generic' });
+    }
+  }
+
+  return links.slice(0, MAX_CONNECT).map((item) => {
+    const platform = detectPlatform(item.provider, item.url);
+    return {
+      url: item.url,
+      platform,
+      label: PLATFORM_LABEL[platform] || PLATFORM_LABEL.link,
+      handle: handleFromUrl(platform, item.url),
+    };
+  });
+}
+
+function renderChip({ platform, label, handle }, index, light) {
+  const id = `holo-${index}${light ? '-l' : ''}`;
+  const icon = ICONS[platform] || ICONS.link;
+  const fill = light ? '#ffffff' : '#161b22';
+  const ink = light ? '#0f172a' : '#e6edf3';
+  const mute = light ? '#475569' : '#8b949e';
+  const disc = light ? 'fill="#0f172a" fill-opacity="0.1"' : 'fill="#ffffff" fill-opacity="0.16"';
+  const rim = light ? 'stroke="#0f172a" stroke-opacity="0.08"' : 'stroke="#ffffff" stroke-opacity="0.22"';
+  const ping = light ? 'stroke="#0f172a"' : 'stroke="#ffffff"';
+  const mark = light ? '#0f172a' : '#ffffff';
+  const stops = light
+    ? `<stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="18%" stop-color="#f6f8fc"/>
+      <stop offset="38%" stop-color="#0069e0"/>
+      <stop offset="58%" stop-color="#475569"/>
+      <stop offset="78%" stop-color="#f6f8fc"/>
+      <stop offset="100%" stop-color="#0f172a"/>`
+    : `<stop offset="0%" stop-color="#e6edf3"/>
+      <stop offset="18%" stop-color="#0d1117"/>
+      <stop offset="38%" stop-color="#58a6ff"/>
+      <stop offset="58%" stop-color="#8b949e"/>
+      <stop offset="78%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#e6edf3"/>`;
+  const handleSize = handle.length > 14 ? 12 : 13;
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="50" viewBox="0 0 190 50" role="img" aria-label="${escapeXml(label)}">
+  <defs>
+    <linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">
+      ${stops}
+      <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
+    </linearGradient>
+  </defs>
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      rect { animation: nx-fade 500ms ease-out both; }
+      circle { animation: nx-icon 700ms cubic-bezier(0.34,1.56,0.64,1) 120ms both; transform-box: fill-box; transform-origin: center; }
+      text { animation: nx-in 600ms cubic-bezier(0.16,1,0.3,1) both; }
+      text:nth-of-type(1) { animation-delay: 160ms; }
+      text:nth-of-type(2) { animation-delay: 260ms; }
+      @keyframes nx-fade { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes nx-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes nx-icon { 0% { opacity: 0; transform: scale(0.4); } 65% { opacity: 1; transform: scale(1.15); } 100% { opacity: 1; transform: scale(1); } }
+    }
+  </style>
+  <rect x="1" y="2" width="188" height="46" rx="23" fill="${fill}" stroke="url(#${id})" stroke-width="2"/>
+  <rect x="2" y="3" width="186" height="44" rx="22" fill="none" ${rim}/>
+  <circle cx="28" cy="25" r="12" ${disc}/>
+  <circle cx="28" cy="25" r="12" fill="none" ${ping} stroke-opacity="0" stroke-width="1.5">
+    <animate attributeName="r" values="12;21;21" keyTimes="0;0.45;1" dur="5s" begin="1.8s" repeatCount="indefinite"/>
+    <animate attributeName="stroke-opacity" values="0.35;0;0" keyTimes="0;0.45;1" dur="5s" begin="1.8s" repeatCount="indefinite"/>
+  </circle>
+  <g transform="translate(28,25) scale(${icon.scale}) translate(-12,-12)">
+    <path fill="${mark}" d="${icon.path}"/>
+  </g>
+  <text x="49" y="21" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="10" font-weight="850" letter-spacing="1.2" fill="${mute}">${escapeXml(label)}</text>
+  <text x="49" y="37" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="${handleSize}" font-weight="800" fill="${ink}">${escapeXml(handle)}</text>
+</svg>
+`;
+}
+
+function connectReadmeBlock(links) {
+  const chips = links
+    .map((link, i) => {
+      const n = i + 1;
+      const alt = escapeXml(`${link.label} ${link.handle}`);
+      return `  <a href="${escapeXml(link.url)}"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-${n}-light.svg" /><img src="assets/chip-${n}.svg" alt="${alt}" height="50" /></picture></a>`;
+    })
+    .join('\n  &nbsp;&nbsp;\n');
+  return `## 🤝 Connect With Me\n\n<p align="center">\n${chips}\n</p>\n`;
+}
+
+/** Rebuild Connect chips from live GitHub social links and patch README. */
+async function refreshConnect() {
+  const links = await fetchSocialLinks();
+  if (!links.length) throw new Error('connect: no social links resolved');
+
+  for (let i = 0; i < links.length; i++) {
+    const n = i + 1;
+    await writeFile(`${OUT_DIR}/chip-${n}.svg`, renderChip(links[i], n, false));
+    await writeFile(`${OUT_DIR}/chip-${n}-light.svg`, renderChip(links[i], n, true));
+    console.log('updated', `chip-${n}.svg`);
+  }
+
+  for (let n = links.length + 1; n <= MAX_CONNECT; n++) {
+    for (const suffix of ['', '-light']) {
+      try {
+        await unlink(`${OUT_DIR}/chip-${n}${suffix}.svg`);
+        console.log('removed', `chip-${n}${suffix}.svg`);
+      } catch {
+        /* absent is fine */
+      }
+    }
+  }
+
+  const readme = await readFile('README.md', 'utf8');
+  if (!/## 🤝 Connect With Me/.test(readme)) throw new Error('connect: README missing Connect section');
+  const next = readme.replace(/## 🤝 Connect With Me[\s\S]*$/, connectReadmeBlock(links));
+  await writeFile('README.md', next);
+  console.log('updated README.md connect section', `(${links.length} chip${links.length === 1 ? '' : 's'})`);
+}
+
+await mkdir(OUT_DIR, { recursive: true });
+
+const failures = [];
+for (const section of SECTIONS) {
+  for (const light of [false, true]) {
+    try {
+      await refresh(section, light);
+    } catch (error) {
+      failures.push(error.message);
+      console.error('failed', error.message);
+    }
+  }
+}
+
+try {
+  await refreshAbout();
+} catch (error) {
+  failures.push(error.message);
+  console.error('failed', error.message);
+}
+
+try {
+  await refreshConnect();
+} catch (error) {
+  failures.push(error.message);
+  console.error('failed', error.message);
+}
+
+if (failures.length) process.exit(1);
