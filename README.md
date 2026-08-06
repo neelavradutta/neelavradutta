@@ -24,5 +24,3 @@
   <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/social?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/social?username=neelavradutta&theme=github-dark" alt="neelavradutta social links" /></picture>
 </p>
 
-[![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/neelavradutta)
-
