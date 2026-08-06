@@ -28,6 +28,6 @@
   <a href="https://github.com/neelavradutta"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-github-light.svg" /><img src="assets/chip-github.svg" alt="GitHub @neelavradutta" height="50" /></picture></a>
   <a href="https://www.instagram.com/toeiooo.so/"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-instagram-light.svg" /><img src="assets/chip-instagram.svg" alt="Instagram @toeiooo.so" height="50" /></picture></a>
   <a href="https://leetcode.com/u/neelavra_dutta/"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-leetcode-light.svg" /><img src="assets/chip-leetcode.svg" alt="LeetCode neelavra_dutta" height="50" /></picture></a>
-  <a href="https://x.com/Neel_avra"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-twitter-light.svg" /><img src="assets/chip-twitter.svg" alt="Twitter @Neel_avra" height="50" /></picture></a>
+  <a href="https://x.com/Neel_avra1"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-twitter-light.svg" /><img src="assets/chip-twitter.svg" alt="Twitter @Neel_avra1" height="50" /></picture></a>
 </p>
 

@@ -87,51 +87,85 @@ const CUSTOMIZE = {
 };
 
 /**
- * Motion layer. Every rule below animates transform, opacity or stroke-dashoffset only,
- * so the palette GitSkins renders stays untouched.
+ * Motion layer — one choreographed entrance per card, then stillness.
  *
- * The `.aura-*` rules restate the card's own entrance animation because a bare
- * `animation:` shorthand on an equally specific selector would cancel it.
+ * Rules: single axis (rise), 60–120ms sibling stagger, expo-out settles,
+ * spring overshoot only on small focal elements (numbers, dots). No infinite
+ * loops except the hero's slow dashed orbit; ambient life comes from the
+ * background orbs GitSkins already ships. Only transform / opacity /
+ * stroke-dashoffset are animated, so the palette never changes.
+ *
+ * The `.aura-*` compound rules restate the card's own animation names because a
+ * bare `animation:` shorthand on an equally specific selector would cancel them.
  */
 function motionStyles(prefix) {
   return `
     @media (prefers-reduced-motion: no-preference) {
-      #${prefix} .nx-rise { animation: nx-rise 1s cubic-bezier(0.16,1,0.3,1) both; }
-      #${prefix} .nx-rise-late { animation-delay: 160ms; }
-      #${prefix} .nx-pop { animation: nx-pop 900ms cubic-bezier(0.34,1.56,0.64,1) both 320ms; transform-box: fill-box; transform-origin: center bottom; }
-      #${prefix} .nx-halo { animation: nx-halo 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-      #${prefix} .nx-orbit { animation: nx-orbit 32s linear infinite; transform-box: view-box; transform-origin: 735px 88px; }
-      #${prefix} .nx-sweep { animation: nx-sweep 4.2s cubic-bezier(0.45,0,0.55,1) infinite 900ms; }
-      #${prefix} .aura-chip.nx-float { animation: ${prefix}-chip 650ms ease-out both, nx-float 7s ease-in-out infinite 1s; }
-      #${prefix} .aura-bar.nx-glow { animation: ${prefix}-bar 1.15s ease-out both, nx-glow 3.4s ease-in-out infinite 1.3s; }
-      @keyframes nx-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-      @keyframes nx-pop { 0% { opacity: 0; transform: scale(0.6); } 60% { opacity: 1; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
-      @keyframes nx-halo { 0%,100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.045); opacity: 0.62; } }
-      @keyframes nx-orbit { to { transform: rotate(360deg); } }
-      @keyframes nx-sweep { 0% { stroke-dashoffset: 340; } 55%,100% { stroke-dashoffset: -260; } }
-      @keyframes nx-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
-      @keyframes nx-glow { 0%,100% { opacity: 0.95; } 50% { opacity: 0.62; } }
+      #${prefix} .nx-in { animation: nx-in 700ms cubic-bezier(0.16,1,0.3,1) both; }
+      #${prefix} .nx-in-2 { animation-delay: 120ms; }
+      #${prefix} .nx-fade { animation: nx-fade 500ms ease-out both; }
+      #${prefix} .nx-avatar { animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
+      #${prefix} .nx-shine { stroke-dasharray: 260; animation: nx-draw 1s cubic-bezier(0.16,1,0.3,1) 550ms both; }
+      #${prefix} .nx-num { animation: nx-pop 700ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center bottom; }
+      #${prefix} .nx-dot { animation: nx-pop 550ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .aura-ring.nx-spin { animation: ${prefix}-ring 8s ease-in-out infinite, nx-spin 60s linear infinite; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .aura-ring-b.nx-spin-rev { animation: ${prefix}-ring 10s ease-in-out infinite 1.6s, nx-spin-rev 45s linear infinite; transform-box: fill-box; transform-origin: center; }
+      #${prefix} g.aura-chip { animation: nx-card 800ms cubic-bezier(0.22,1,0.36,1) both; }
+      #${prefix} .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both; }
+      @keyframes nx-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes nx-fade { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes nx-scale-in { from { opacity: 0; transform: scale(0.88); } to { opacity: 1; transform: scale(1); } }
+      @keyframes nx-draw { to { stroke-dashoffset: 0; } }
+      @keyframes nx-handle { from { opacity: 0; letter-spacing: 8px; } to { opacity: 1; letter-spacing: 2.6px; } }
+      @keyframes nx-pop { 0% { opacity: 0; transform: scale(0.5); } 65% { opacity: 1; transform: scale(1.12); } 100% { opacity: 1; transform: scale(1); } }
+      @keyframes nx-spin { to { transform: rotate(360deg); } }
+      @keyframes nx-spin-rev { to { transform: rotate(-360deg); } }
+      @keyframes nx-card { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+      @keyframes nx-bar { 0% { transform: scaleX(0); } 75% { transform: scaleX(1.03); } 100% { transform: scaleX(1); } }
     }
 `;
 }
 
-const FLOAT_CHIPS = (svg) => svg.replace(/<g class="aura-chip"/g, '<g class="aura-chip nx-float"');
-const GLOW_BARS = (svg) => svg.replace(/class="aura-bar"/g, 'class="aura-bar nx-glow"');
+/** Injects an inline animation-delay so nested elements inherit their row's stagger. */
+function staggered(svg, pattern, insert, base, step) {
+  let index = 0;
+  return svg.replace(pattern, (...match) => insert(match, `style="animation-delay:${base + index++ * step}ms"`));
+}
 
 const ANIMATE = {
-  hero: (svg) => svg
-    .replace('<circle cx="96" cy="88" r="48"', '<circle class="nx-halo" cx="96" cy="88" r="48"')
-    .replace('<circle class="aura-ring" cx="735" cy="88" r="86"', '<circle class="aura-ring nx-orbit" stroke-dasharray="7 11" cx="735" cy="88" r="86"')
-    .replace('<path d="M166 70 C246 44 330 44 410 71"', '<path class="nx-sweep" stroke-dasharray="80 260" d="M166 70 C246 44 330 44 410 71"')
-    .replace('<text x="166" y="63"', '<text class="nx-rise" x="166" y="63"')
-    .replace('<text x="166" y="116"', '<text class="nx-rise nx-rise-late" x="166" y="116"')
-    .replace('<text x="735" y="82"', '<text class="nx-pop" x="735" y="82"'),
+  hero: (svg, prefix) => svg
+    // Name reveals through a left-to-right wipe, timed with the arc drawing above it.
+    .replace('</defs>', `  <clipPath id="${prefix}-namewipe"><rect x="166" y="64" width="0" height="66"><animate attributeName="width" values="0;520" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" begin="0.35s" dur="0.9s" fill="freeze"/></rect></clipPath>\n  </defs>`)
+    .replace('<text x="166" y="116"', `<text clip-path="url(#${prefix}-namewipe)" x="166" y="116"`)
+    .replace(' x="51" y="43" width="90"', ' class="nx-avatar" x="51" y="43" width="90"')
+    .replace('<circle cx="96" cy="88" r="48"', '<circle class="nx-ring-draw" stroke-dashoffset="302" cx="96" cy="88" r="48"')
+    .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"')
+    .replace('<path d="M166 70 C246 44 330 44 410 71"', '<path class="nx-shine" stroke-dashoffset="260" d="M166 70 C246 44 330 44 410 71"')
+    .replace('<circle class="aura-ring" cx="735" cy="88" r="86"', '<circle class="aura-ring nx-spin" stroke-dasharray="7 11" cx="735" cy="88" r="86"')
+    .replace('<circle class="aura-ring-b" cx="735" cy="88"', '<circle class="aura-ring-b nx-spin-rev" stroke-dasharray="1 9" cx="735" cy="88"')
+    .replace('<text x="735" y="82"', '<text class="nx-num" style="animation-delay:800ms" x="735" y="82"')
+    .replace('<text x="735" y="104"', '<text class="nx-fade" style="animation-delay:950ms" x="735" y="104"'),
 
-  stats: (svg) => GLOW_BARS(FLOAT_CHIPS(svg))
-    .replace(/<text x="(\d+)" y="162"/g, '<text class="nx-pop" x="$1" y="162"'),
+  stats: (svg) => {
+    svg = svg
+      .replace('<text x="46" y="61"', '<text class="nx-in" x="46" y="61"')
+      .replace('<text x="48" y="84"', '<text class="nx-in nx-in-2" x="48" y="84"');
+    svg = staggered(svg, /<text x="(\d+)" y="162"/g, ([, x], style) => `<text class="nx-num" ${style} x="${x}" y="162"`, 350, 100);
+    svg = staggered(svg, /class="aura-bar"/g, (_m, style) => `class="aura-bar" ${style}`, 500, 100);
+    return svg;
+  },
 
-  stack: (svg) => GLOW_BARS(FLOAT_CHIPS(svg))
-    .replace(/<circle cx="54" cy="(\d+)" r="5"/g, '<circle class="nx-halo" cx="54" cy="$1" r="5"'),
+  stack: (svg) => {
+    svg = svg
+      .replace('<text x="46" y="61"', '<text class="nx-in" x="46" y="61"')
+      .replace('<text x="48" y="84"', '<text class="nx-in nx-in-2" x="48" y="84"');
+    svg = staggered(svg, /<circle cx="54" cy="(\d+)" r="5"/g, ([, cy], style) => `<circle class="nx-dot" ${style} cx="54" cy="${cy}" r="5"`, 250, 95);
+    svg = staggered(svg, /<text x="306" y="(\d+)"/g, ([, y], style) => `<text class="nx-fade" ${style} x="306" y="${y}"`, 650, 95);
+    svg = staggered(svg, /class="aura-bar"/g, (_m, style) => `class="aura-bar" ${style}`, 400, 95);
+    return svg;
+  },
 };
 
 function addMotion(svg, section) {
@@ -141,7 +175,7 @@ function addMotion(svg, section) {
   const prefix = svg.match(/<g id="(gs-[^"]+)"/)?.[1];
   if (!prefix) throw new Error('could not find the card id needed to scope the motion styles');
 
-  return enhance(svg).replace('  </style>', `${motionStyles(prefix)}  </style>`);
+  return enhance(svg, prefix).replace('  </style>', `${motionStyles(prefix)}  </style>`);
 }
 
 async function refresh(section, light) {
