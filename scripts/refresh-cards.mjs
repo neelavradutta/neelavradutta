@@ -3,16 +3,17 @@
  * so the numbers stay in sync with the live GitHub profile.
  *
  * Hand-written / locally customized — never overwritten here:
- * - assets/about.svg, assets/about-light.svg
  * - assets/social.svg, assets/social-light.svg
+ * About cards keep their design; only the bio lines are refreshed from GitHub.
  */
 
-import { writeFile, mkdir } from 'node:fs/promises';
+import { writeFile, mkdir, readFile } from 'node:fs/promises';
 
 const USERNAME = 'neelavradutta';
 const THEME = 'github-dark';
 const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
+const ABOUT_LINE_CHARS = 62;
 
 const HERO_HEIGHT = 176;
 const HERO_SHIFT = 6;
@@ -254,4 +255,65 @@ for (const section of SECTIONS) {
   }
 }
 
+try {
+  await refreshAbout();
+} catch (error) {
+  failures.push(error.message);
+  console.error('failed', error.message);
+}
+
 if (failures.length) process.exit(1);
+
+/** Fetches the live GitHub bio (same source GitSkins uses for profile copy). */
+async function fetchBio() {
+  const headers = { 'User-Agent': 'neelavradutta-profile-refresh', Accept: 'application/vnd.github+json' };
+  if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
+  const response = await fetch(`https://api.github.com/users/${USERNAME}`, { headers });
+  if (!response.ok) throw new Error(`about: GitHub API HTTP ${response.status}`);
+  const bio = (await response.json()).bio?.trim();
+  if (!bio) throw new Error('about: GitHub bio is empty');
+  return bio;
+}
+
+/** Greedy word-wrap into up to 3 lines that fit the About card. */
+function wrapBio(bio) {
+  const words = bio.replace(/\s+/g, ' ').split(' ');
+  const lines = [];
+  let current = '';
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length > ABOUT_LINE_CHARS && current) {
+      lines.push(current);
+      current = word;
+      if (lines.length === 3) break;
+    } else {
+      current = next;
+    }
+  }
+  if (lines.length < 3 && current) lines.push(current);
+  while (lines.length < 3) lines.push('');
+  return lines.slice(0, 3).map((line) =>
+    line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;'),
+  );
+}
+
+/** Updates only the three bio <text> nodes inside the hand-made About cards. */
+async function refreshAbout() {
+  const [line1, line2, line3] = wrapBio(await fetchBio());
+  for (const name of ['about.svg', 'about-light.svg']) {
+    const path = `${OUT_DIR}/${name}`;
+    let svg = await readFile(path, 'utf8');
+    let i = 0;
+    const next = svg.replace(
+      /(<text class="line(?: line-[23])?"[^>]*>)([^<]*)(<\/text>)/g,
+      (_m, open, _old, close) => `${open}${[line1, line2, line3][i++]}${close}`,
+    );
+    if (i !== 3) throw new Error(`${name}: expected 3 about lines, found ${i}`);
+    await writeFile(path, next);
+    console.log('updated', name);
+  }
+}

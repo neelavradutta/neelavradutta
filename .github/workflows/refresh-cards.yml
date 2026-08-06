@@ -23,6 +23,8 @@ jobs:
           node-version: '22'
 
       - name: Re-render cards from live GitHub data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/refresh-cards.mjs
 
       - name: Commit refreshed cards

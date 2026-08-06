@@ -63,9 +63,9 @@
     <circle class="ring" cx="752" cy="120" r="70" fill="none" stroke="#e6edf3" stroke-opacity="0.14"/>
     <rect x="28" y="26" width="804" height="188" rx="28" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.48"/>
     <text class="label" x="48" y="60" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="11" font-weight="800" letter-spacing="4" fill="#8b949e">ABOUT</text>
-    <text class="line" x="46" y="96" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#e6edf3">Full-Stack Developer specializing in Python, FastAPI, Next.js,</text>
-    <text class="line line-2" x="46" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#e6edf3">React, MySQL, and Computer Vision. Passionate about AI-driven</text>
-    <text class="line line-3" x="46" y="156" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#e6edf3">applications, scalable software, and clean architecture.</text>
+    <text class="line" x="46" y="96" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#e6edf3">Full-Stack Developer skilled in Python, FastAPI, Next.js,</text>
+    <text class="line line-2" x="46" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#e6edf3">React, MySQL, and Computer Vision. Passionate about AI-powered</text>
+    <text class="line line-3" x="46" y="156" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#e6edf3">applications and scalable software.</text>
     <g clip-path="url(#about-typewriter)">
       <text x="48" y="192" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="750" fill="#58a6ff">&gt; open to collaboration</text>
       <text class="cursor" x="211" y="192" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#58a6ff">_</text>
