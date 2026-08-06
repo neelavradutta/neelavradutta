@@ -51,6 +51,7 @@
       <stop offset="100%" stop-color="#0f172a"/>
       <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
     </linearGradient>
+    <clipPath id="gs-hero-neelavradutta-github-dark-light-round"><rect width="860" height="176" rx="32" ry="32"/></clipPath>
     <clipPath id="gs-hero-neelavradutta-github-dark-light-namewipe"><rect x="166" y="64" width="0" height="66"><animate attributeName="width" values="0;520" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" begin="0.35s" dur="0.9s" fill="freeze"/></rect></clipPath>
   </defs>
   <style>
@@ -98,7 +99,7 @@
       @keyframes nx-bar { 0% { transform: scaleX(0); } 75% { transform: scaleX(1.03); } 100% { transform: scaleX(1); } }
     }
   </style>
-  <g id="gs-hero-neelavradutta-github-dark-light">
+  <g id="gs-hero-neelavradutta-github-dark-light" clip-path="url(#gs-hero-neelavradutta-github-dark-light-round)">
     <rect width="860" height="176" rx="32" fill="url(#gs-hero-neelavradutta-github-dark-light-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="32" rx="206" ry="81" fill="url(#gs-hero-neelavradutta-github-dark-light-orb-0)"/>

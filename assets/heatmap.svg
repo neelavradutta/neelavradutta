@@ -51,6 +51,7 @@
       <stop offset="100%" stop-color="#e6edf3"/>
       <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
     </linearGradient>
+    <clipPath id="gs-heatmap-neelavradutta-github-dark-dark-round"><rect width="860" height="230" rx="32" ry="32"/></clipPath>
   </defs>
   <style>
     #gs-heatmap-neelavradutta-github-dark-dark .aura-orb-a { animation: gs-heatmap-neelavradutta-github-dark-dark-float-a 9s ease-in-out infinite; }
@@ -71,7 +72,7 @@
     @keyframes gs-heatmap-neelavradutta-github-dark-dark-cursor { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
     @keyframes gs-heatmap-neelavradutta-github-dark-dark-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   </style>
-  <g id="gs-heatmap-neelavradutta-github-dark-dark">
+  <g id="gs-heatmap-neelavradutta-github-dark-dark" clip-path="url(#gs-heatmap-neelavradutta-github-dark-dark-round)">
     <rect width="860" height="230" rx="32" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="41" rx="206" ry="106" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-orb-0)"/>

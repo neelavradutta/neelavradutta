@@ -51,6 +51,7 @@
       <stop offset="100%" stop-color="#e6edf3"/>
       <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
     </linearGradient>
+    <clipPath id="gs-stats-neelavradutta-github-dark-dark-round"><rect width="860" height="260" rx="32" ry="32"/></clipPath>
   </defs>
   <style>
     #gs-stats-neelavradutta-github-dark-dark .aura-orb-a { animation: gs-stats-neelavradutta-github-dark-dark-float-a 9s ease-in-out infinite; }
@@ -97,7 +98,7 @@
       @keyframes nx-bar { 0% { transform: scaleX(0); } 75% { transform: scaleX(1.03); } 100% { transform: scaleX(1); } }
     }
   </style>
-  <g id="gs-stats-neelavradutta-github-dark-dark">
+  <g id="gs-stats-neelavradutta-github-dark-dark" clip-path="url(#gs-stats-neelavradutta-github-dark-dark-round)">
     <rect width="860" height="260" rx="32" fill="url(#gs-stats-neelavradutta-github-dark-dark-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="47" rx="206" ry="120" fill="url(#gs-stats-neelavradutta-github-dark-dark-orb-0)"/>
