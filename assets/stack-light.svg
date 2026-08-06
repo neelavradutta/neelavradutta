@@ -108,7 +108,7 @@
     <ellipse class="aura-orb-c" cx="499" cy="246" rx="310" ry="95" fill="url(#gs-stack-neelavradutta-github-dark-light-orb-2)"/>
     <ellipse class="aura-orb-b" cx="826" cy="218" rx="172" ry="118" fill="url(#gs-stack-neelavradutta-github-dark-light-orb-3)"/>
     <rect x="28" y="26" width="804" height="226" rx="28" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.5"/>
-    <text class="nx-in" x="46" y="61" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="27" font-weight="850" letter-spacing="-0.4" fill="#0f172a">Language Stack</text>
+    <text class="nx-in" x="46" y="61" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="24" font-weight="850" letter-spacing="-0.4" fill="#0f172a">Language Stack</text>
     <text class="nx-in nx-in-2" x="48" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="650" letter-spacing="1.1" fill="#475569">Repository-weighted technologies</text>
     <g class="aura-chip" style="animation-delay:0ms">
       <circle class="nx-dot" style="animation-delay:250ms" cx="54" cy="107" r="5" fill="#4b8cd2"/>

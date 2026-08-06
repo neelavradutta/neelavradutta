@@ -71,10 +71,20 @@ function trimHero(svg) {
     .replace('d="M166 76 C246 50 330 50 410 77"', 'd="M166 70 C246 44 330 44 410 71"');
 }
 
+/** Match section titles to Contribution Activity (24px / weight 850 / -0.4 tracking). */
+function matchSectionTitle(svg) {
+  return svg.replace(
+    /(<text[^>]*>)(?:Language Stack|GitHub Stats|Profile Signal|Contribution Activity)(<\/text>)/g,
+    (full, _open, _close) => full
+      .replace(/font-size="\d+"/, 'font-size="24"')
+      .replace(/letter-spacing="[^"]*"/, 'letter-spacing="-0.4"')
+      .replace(/>Profile Signal</, '>GitHub Stats<'),
+  );
+}
+
 /** Tweaks label + figure sizes inside each stat box. */
 function shrinkStats(svg) {
-  return svg
-    .replace(/>Profile Signal</g, '>GitHub Stats<')
+  return matchSectionTitle(svg)
     .replace(/(<text x="\d+" y="126"[^>]*?)font-size="12"/g, '$1font-size="13"')
     .replace(/(<text x="\d+" y=")166("[^>]*?)font-size="35"/g, '$1162$2font-size="28"');
 }
@@ -96,7 +106,7 @@ function alignStatBoxes(svg) {
 
 /** Drops the "> stack.scan" terminal flourish and its blinking cursor. */
 function trimStack(svg) {
-  return svg
+  return matchSectionTitle(svg)
     .replace(/[ \t]*<text[^>]*>&gt; stack\.scan<\/text>\r?\n?/, '')
     .replace(/[ \t]*<text class="aura-cursor" x="786"[^>]*>_<\/text>\r?\n?/, '');
 }
@@ -132,7 +142,7 @@ const CUSTOMIZE = {
   hero: (svg) => roundCorners(trimHero(svg)),
   stats: (svg) => roundCorners(alignStatBoxes(shrinkStats(svg))),
   stack: (svg) => roundCorners(trimStack(svg)),
-  heatmap: roundCorners,
+  heatmap: (svg) => roundCorners(matchSectionTitle(svg)),
 };
 
 /**
