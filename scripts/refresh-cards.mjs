@@ -368,16 +368,25 @@ async function refreshAbout(bio) {
     const next = svg.replace(
       /(<text class="line(?: line-[23])?"[^>]*>)([^<]*)(<\/text>)/g,
       (_m, open, _old, close) => {
-        const tag = open
+        const ink = name.includes('light') ? '#0f172a' : '#e6edf3';
+        let tag = open
           .replace(/\s*textLength="[^"]*"/g, '')
           .replace(/\s*lengthAdjust="[^"]*"/g, '')
-          .replace(/\bfont-weight="[^"]*"/, 'font-weight="900"')
+          .replace(/\bfont-weight="[^"]*"/, 'font-weight="800"')
           .replace(/\bfont-size="[^"]*"/, 'font-size="18"')
-          .replace(/\bletter-spacing="[^"]*"/, 'letter-spacing="0"');
-        const withAnchor = /\btext-anchor=/.test(tag)
+          .replace(/\bletter-spacing="[^"]*"/, 'letter-spacing="0"')
+          .replace(/\bfill="[^"]*"/, `fill="${ink}"`)
+          .replace(/\s*stroke="[^"]*"/g, '')
+          .replace(/\s*stroke-width="[^"]*"/g, '')
+          .replace(/\s*paint-order="[^"]*"/g, '');
+        tag = /\btext-anchor=/.test(tag)
           ? tag.replace(/\btext-anchor="[^"]*"/, 'text-anchor="start"')
           : tag.replace(/>$/, ' text-anchor="start">');
-        return `${withAnchor}${[line1, line2, line3][i++]}${close}`;
+        tag = tag.replace(
+          />$/,
+          ` stroke="${ink}" stroke-width="0.55" paint-order="stroke fill">`,
+        );
+        return `${tag}${[line1, line2, line3][i++]}${close}`;
       },
     );
     if (i !== 3) throw new Error(`${name}: expected 3 about lines, found ${i}`);
