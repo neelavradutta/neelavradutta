@@ -14,7 +14,10 @@ const USERNAME = 'neelavradutta';
 const THEME = 'github-dark';
 const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
-const ABOUT_LINE_CHARS = 62;
+/** Max chars per bio line before forced wrap (≈ full inner card width at 20px). */
+const ABOUT_LINE_CHARS = 78;
+/** Stretch each bio line from x=46 across the card (ends ~x=806). */
+const ABOUT_TEXT_LENGTH = 760;
 const MAX_CONNECT = 4;
 
 const HERO_HEIGHT = 176;
@@ -72,6 +75,19 @@ function trimHero(svg) {
     .replace('d="M166 76 C246 50 330 50 410 77"', 'd="M166 70 C246 44 330 44 410 71"');
 }
 
+/** Insert / replace the profile location line under the hero name. */
+function injectHeroLocation(svg, location, light) {
+  svg = svg.replace(/[ \t]*<text class="nx-location"[^>]*>[^<]*<\/text>\r?\n?/g, '');
+  if (!location) return svg;
+  const fill = light ? '#475569' : '#8b949e';
+  const line =
+    `    <text class="nx-location" x="166" y="140" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="650" letter-spacing="0.4" fill="${fill}">${escapeXml(location)}</text>\n`;
+  return svg.replace(
+    /(<text[^>]*x="166" y="116"[^>]*>[^<]*<\/text>)\r?\n?/,
+    `$1\n${line}`,
+  );
+}
+
 /** Match section titles to Contribution Activity (24px / weight 850 / -0.4 tracking). */
 function matchSectionTitle(svg) {
   return svg.replace(
@@ -126,6 +142,37 @@ function trimStack(svg) {
     .replace(/[ \t]*<text class="aura-cursor" x="786"[^>]*>_<\/text>\r?\n?/, '');
 }
 
+/** Five distinct bright accents for the language rows (dot / % / bar). */
+const STACK_ROW_COLORS = ['#3B9EFF', '#FF4D9A', '#FFD60A', '#2EE6A6', '#FF6B35'];
+
+function brightenStackColors(svg) {
+  let row = 0;
+  svg = svg.replace(/<circle\b[^>]*>/gi, (tag) => {
+    if (!/\bcx="54"/.test(tag) || !/\br="5"/.test(tag)) return tag;
+    const color = STACK_ROW_COLORS[row++];
+    if (!color) return tag;
+    return tag.replace(/\bfill="#[0-9A-Fa-f]{3,8}"/i, `fill="${color}"`);
+  });
+
+  row = 0;
+  svg = svg.replace(/<text\b[^>]*>/gi, (tag) => {
+    if (!/\bx="306"/.test(tag)) return tag;
+    const color = STACK_ROW_COLORS[row++];
+    if (!color) return tag;
+    return tag.replace(/\bfill="#[0-9A-Fa-f]{3,8}"/i, `fill="${color}"`);
+  });
+
+  row = 0;
+  svg = svg.replace(/<rect\b[^>]*>/gi, (tag) => {
+    if (!/\baura-bar\b/.test(tag)) return tag;
+    const color = STACK_ROW_COLORS[row++];
+    if (!color) return tag;
+    return tag.replace(/\bfill="#[0-9A-Fa-f]{3,8}"/i, `fill="${color}"`);
+  });
+
+  return svg;
+}
+
 /**
  * Soften every card / panel corner, then clip the whole group to that rounded
  * rect so glow orbs cannot paint sharp square corners outside the bg curve.
@@ -156,7 +203,7 @@ function roundCorners(svg) {
 const CUSTOMIZE = {
   hero: (svg) => roundCorners(trimHero(svg)),
   stats: (svg) => roundCorners(tightenStats(alignStatBoxes(shrinkStats(svg)))),
-  stack: (svg) => roundCorners(trimStack(svg)),
+  stack: (svg) => roundCorners(brightenStackColors(trimStack(svg))),
   heatmap: (svg) => roundCorners(matchSectionTitle(svg)),
 };
 
@@ -181,6 +228,7 @@ function motionStyles(prefix) {
       #${prefix} .nx-avatar { animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both; transform-box: fill-box; transform-origin: center; }
       #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
       #${prefix} .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
+      #${prefix} .nx-location { animation: nx-fade 500ms ease-out 900ms both; }
       #${prefix} .nx-shine { stroke-dasharray: 260; animation: nx-draw 1s cubic-bezier(0.16,1,0.3,1) 550ms both; }
       #${prefix} .nx-num { animation: nx-pop 700ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center bottom; }
       #${prefix} .nx-dot { animation: nx-pop 550ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center; }
@@ -250,11 +298,12 @@ function addMotion(svg, section) {
   return enhance(svg, prefix).replace('  </style>', `${motionStyles(prefix)}  </style>`);
 }
 
-async function refresh(section, light) {
+async function refresh(section, light, profile = {}) {
   const name = `${section}${light ? '-light' : ''}.svg`;
   let svg = removeBranding(await download(section, light));
   const customize = CUSTOMIZE[section];
   if (customize) svg = customize(svg);
+  if (section === 'hero') svg = injectHeroLocation(svg, profile.location, light);
   svg = addMotion(svg, section);
 
   if (/gitskins/i.test(svg)) throw new Error(`${name}: branding survived the cleanup`);
@@ -279,18 +328,19 @@ function escapeXml(value) {
     .replace(/"/g, '&quot;');
 }
 
-/** Fetches the live GitHub bio (same source GitSkins uses for profile copy). */
-async function fetchBio() {
+/** Fetches live GitHub profile fields (bio + location). */
+async function fetchProfile() {
   const response = await fetch(`https://api.github.com/users/${USERNAME}`, { headers: githubHeaders() });
-  if (!response.ok) throw new Error(`about: GitHub API HTTP ${response.status}`);
-  const bio = (await response.json()).bio?.trim();
-  if (!bio) throw new Error('about: GitHub bio is empty');
-  return bio;
+  if (!response.ok) throw new Error(`profile: GitHub API HTTP ${response.status}`);
+  const data = await response.json();
+  return {
+    bio: data.bio?.trim() || '',
+    location: data.location?.trim() || '',
+  };
 }
 
-/** Greedy word-wrap into up to 3 lines that fit the About card. */
-function wrapBio(bio) {
-  const words = bio.replace(/\s+/g, ' ').split(' ');
+/** Greedy wrap when a single line would overflow the card. */
+function wrapBioGreedy(words) {
   const lines = [];
   let current = '';
   for (const word of words) {
@@ -305,19 +355,83 @@ function wrapBio(bio) {
   }
   if (lines.length < 3 && current) lines.push(current);
   while (lines.length < 3) lines.push('');
+  return lines.slice(0, 3);
+}
+
+/**
+ * Split bio into 3 balanced lines that start left and can stretch across the card.
+ * Prefer even lengths so textLength fill does not look sparse on a short last line.
+ */
+function wrapBio(bio) {
+  const words = bio.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
+  if (!words.length) return ['', '', ''].map(escapeXml);
+
+  const lengths = [];
+  let run = 0;
+  for (let i = 0; i < words.length; i++) {
+    run += words[i].length + (i > 0 ? 1 : 0);
+    lengths.push(run);
+  }
+  const total = lengths.at(-1);
+
+  const nearestBreak = (target, minIdx, maxIdx) => {
+    let best = minIdx;
+    let bestDist = Infinity;
+    for (let i = minIdx; i <= maxIdx; i++) {
+      const dist = Math.abs(lengths[i] - target);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    }
+    return best;
+  };
+
+  // Leave at least one word on the last line.
+  let b1 = nearestBreak(total / 3, 0, Math.max(0, words.length - 3));
+  let b2 = nearestBreak((2 * total) / 3, b1 + 1, Math.max(b1 + 1, words.length - 2));
+
+  let lines = [
+    words.slice(0, b1 + 1).join(' '),
+    words.slice(b1 + 1, b2 + 1).join(' '),
+    words.slice(b2 + 1).join(' '),
+  ];
+
+  if (lines.some((line) => line.length > ABOUT_LINE_CHARS)) {
+    lines = wrapBioGreedy(words);
+  }
+
+  while (lines.length < 3) lines.push('');
   return lines.slice(0, 3).map(escapeXml);
 }
 
 /** Updates only the three bio <text> nodes inside the hand-made About cards. */
-async function refreshAbout() {
-  const [line1, line2, line3] = wrapBio(await fetchBio());
+async function refreshAbout(bio) {
+  if (!bio) throw new Error('about: GitHub bio is empty');
+  const [line1, line2, line3] = wrapBio(bio);
   for (const name of ['about.svg', 'about-light.svg']) {
     const path = `${OUT_DIR}/${name}`;
     let svg = await readFile(path, 'utf8');
     let i = 0;
     const next = svg.replace(
       /(<text class="line(?: line-[23])?"[^>]*>)([^<]*)(<\/text>)/g,
-      (_m, open, _old, close) => `${open}${[line1, line2, line3][i++]}${close}`,
+      (_m, open, _old, close) => {
+        let tag = open;
+        if (!/textLength=/.test(tag)) {
+          tag = tag.replace(
+            />$/,
+            ` textLength="${ABOUT_TEXT_LENGTH}" lengthAdjust="spacingAndGlyphs">`,
+          );
+        } else {
+          tag = tag
+            .replace(/textLength="[^"]*"/, `textLength="${ABOUT_TEXT_LENGTH}"`)
+            .replace(/lengthAdjust="[^"]*"/, 'lengthAdjust="spacingAndGlyphs"');
+          if (!/lengthAdjust=/.test(tag)) {
+            tag = tag.replace(/>$/, ' lengthAdjust="spacingAndGlyphs">');
+          }
+        }
+        return `${tag}${[line1, line2, line3][i++]}${close}`;
+      },
     );
     if (i !== 3) throw new Error(`${name}: expected 3 about lines, found ${i}`);
     await writeFile(path, next);
@@ -548,10 +662,19 @@ async function refreshConnect() {
 await mkdir(OUT_DIR, { recursive: true });
 
 const failures = [];
+let profile = { bio: '', location: '' };
+try {
+  profile = await fetchProfile();
+  if (profile.location) console.log('profile location:', profile.location);
+} catch (error) {
+  failures.push(error.message);
+  console.error('failed', error.message);
+}
+
 for (const section of SECTIONS) {
   for (const light of [false, true]) {
     try {
-      await refresh(section, light);
+      await refresh(section, light, profile);
     } catch (error) {
       failures.push(error.message);
       console.error('failed', error.message);
@@ -560,7 +683,7 @@ for (const section of SECTIONS) {
 }
 
 try {
-  await refreshAbout();
+  await refreshAbout(profile.bio);
 } catch (error) {
   failures.push(error.message);
   console.error('failed', error.message);
