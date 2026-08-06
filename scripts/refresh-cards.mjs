@@ -97,15 +97,31 @@ function trimStack(svg) {
     .replace(/[ \t]*<text class="aura-cursor" x="786"[^>]*>_<\/text>\r?\n?/, '');
 }
 
-/** Soften every card / panel corner so sections match the rounder local look. */
+/**
+ * Soften every card / panel corner, then clip the whole group to that rounded
+ * rect so glow orbs cannot paint sharp square corners outside the bg curve.
+ */
 function roundCorners(svg) {
-  return svg
+  svg = svg
     .replace(/width="860" height="(\d+)" rx="20"/g, 'width="860" height="$1" rx="32"')
+    .replace(/width="860" height="(\d+)" rx="32"/g, 'width="860" height="$1" rx="32"')
     .replace(/width="859" height="(\d+)" rx="19\.5"/g, 'width="859" height="$1" rx="31.5"')
+    .replace(/width="859" height="(\d+)" rx="31\.5"/g, 'width="859" height="$1" rx="31.5"')
     .replace(/(width="804" height="\d+" )rx="20"/g, '$1rx="28"')
     .replace(/(width="808" height="\d+" )rx="20"/g, '$1rx="28"')
     .replace(/(width="808" height="\d+" )rx="22"/g, '$1rx="28"')
     .replace(/(width="180" height="122" )rx="18"/g, '$1rx="24"');
+
+  const height = svg.match(/width="860" height="(\d+)"/)?.[1];
+  const prefix = svg.match(/<g id="(gs-[^"]+)"/)?.[1];
+  if (!height || !prefix || svg.includes(`${prefix}-round`)) return svg;
+
+  return svg
+    .replace(
+      '</defs>',
+      `  <clipPath id="${prefix}-round"><rect width="860" height="${height}" rx="32" ry="32"/></clipPath>\n  </defs>`,
+    )
+    .replace(`<g id="${prefix}">`, `<g id="${prefix}" clip-path="url(#${prefix}-round)">`);
 }
 
 const CUSTOMIZE = {
