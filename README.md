@@ -10,6 +10,10 @@
   <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/stack?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/stack?username=neelavradutta&theme=github-dark" alt="Language stack" /></picture>
 </p>
 
+<p align="center">
+  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/heatmap?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/heatmap?username=neelavradutta&theme=github-dark" alt="Contribution Activity" /></picture>
+</p>
+
 ## 📊 GitHub Stats
 
 <p align="center">
