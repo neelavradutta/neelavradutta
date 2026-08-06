@@ -15,7 +15,7 @@ const THEME = 'github-dark';
 const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
 /** Max chars per bio line before forced wrap (≈ full inner card width at 20px). */
-const ABOUT_LINE_CHARS = 78;
+const ABOUT_LINE_CHARS = 72;
 const MAX_CONNECT = 4;
 
 const HERO_HEIGHT = 176;
@@ -337,8 +337,9 @@ async function fetchProfile() {
   };
 }
 
-/** Greedy wrap when a single line would overflow the card. */
-function wrapBioGreedy(words) {
+/** Greedy word-wrap into up to 3 left-aligned lines that fill card width. */
+function wrapBio(bio) {
+  const words = bio.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
   const lines = [];
   let current = '';
   for (const word of words) {
@@ -352,52 +353,6 @@ function wrapBioGreedy(words) {
     }
   }
   if (lines.length < 3 && current) lines.push(current);
-  while (lines.length < 3) lines.push('');
-  return lines.slice(0, 3);
-}
-
-/**
- * Split bio into 3 balanced left-aligned lines (no stretch / textLength).
- */
-function wrapBio(bio) {
-  const words = bio.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
-  if (!words.length) return ['', '', ''].map(escapeXml);
-
-  const lengths = [];
-  let run = 0;
-  for (let i = 0; i < words.length; i++) {
-    run += words[i].length + (i > 0 ? 1 : 0);
-    lengths.push(run);
-  }
-  const total = lengths.at(-1);
-
-  const nearestBreak = (target, minIdx, maxIdx) => {
-    let best = minIdx;
-    let bestDist = Infinity;
-    for (let i = minIdx; i <= maxIdx; i++) {
-      const dist = Math.abs(lengths[i] - target);
-      if (dist < bestDist) {
-        bestDist = dist;
-        best = i;
-      }
-    }
-    return best;
-  };
-
-  // Leave at least one word on the last line.
-  let b1 = nearestBreak(total / 3, 0, Math.max(0, words.length - 3));
-  let b2 = nearestBreak((2 * total) / 3, b1 + 1, Math.max(b1 + 1, words.length - 2));
-
-  let lines = [
-    words.slice(0, b1 + 1).join(' '),
-    words.slice(b1 + 1, b2 + 1).join(' '),
-    words.slice(b2 + 1).join(' '),
-  ];
-
-  if (lines.some((line) => line.length > ABOUT_LINE_CHARS)) {
-    lines = wrapBioGreedy(words);
-  }
-
   while (lines.length < 3) lines.push('');
   return lines.slice(0, 3).map(escapeXml);
 }
@@ -415,7 +370,10 @@ async function refreshAbout(bio) {
       (_m, open, _old, close) => {
         const tag = open
           .replace(/\s*textLength="[^"]*"/g, '')
-          .replace(/\s*lengthAdjust="[^"]*"/g, '');
+          .replace(/\s*lengthAdjust="[^"]*"/g, '')
+          .replace(/\bfont-weight="[^"]*"/, 'font-weight="600"')
+          .replace(/\bfont-size="[^"]*"/, 'font-size="18"')
+          .replace(/\bletter-spacing="[^"]*"/, 'letter-spacing="0"');
         return `${tag}${[line1, line2, line3][i++]}${close}`;
       },
     );
