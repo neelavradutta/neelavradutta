@@ -372,7 +372,7 @@ async function refreshAbout(bio) {
         let tag = open
           .replace(/\s*textLength="[^"]*"/g, '')
           .replace(/\s*lengthAdjust="[^"]*"/g, '')
-          .replace(/\bfont-weight="[^"]*"/, 'font-weight="800"')
+          .replace(/\bfont-weight="[^"]*"/, 'font-weight="700"')
           .replace(/\bfont-size="[^"]*"/, 'font-size="18"')
           .replace(/\bletter-spacing="[^"]*"/g, '')
           .replace(/\bfill="[^"]*"/, `fill="${ink}"`)
@@ -382,10 +382,6 @@ async function refreshAbout(bio) {
         tag = /\btext-anchor=/.test(tag)
           ? tag.replace(/\btext-anchor="[^"]*"/, 'text-anchor="start"')
           : tag.replace(/>$/, ' text-anchor="start">');
-        tag = tag.replace(
-          />$/,
-          ` stroke="${ink}" stroke-width="0.55" paint-order="stroke fill">`,
-        );
         return `${tag}${[line1, line2, line3][i++]}${close}`;
       },
     );
