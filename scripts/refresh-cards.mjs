@@ -371,10 +371,13 @@ async function refreshAbout(bio) {
         const tag = open
           .replace(/\s*textLength="[^"]*"/g, '')
           .replace(/\s*lengthAdjust="[^"]*"/g, '')
-          .replace(/\bfont-weight="[^"]*"/, 'font-weight="600"')
+          .replace(/\bfont-weight="[^"]*"/, 'font-weight="800"')
           .replace(/\bfont-size="[^"]*"/, 'font-size="18"')
           .replace(/\bletter-spacing="[^"]*"/, 'letter-spacing="0"');
-        return `${tag}${[line1, line2, line3][i++]}${close}`;
+        const withAnchor = /\btext-anchor=/.test(tag)
+          ? tag.replace(/\btext-anchor="[^"]*"/, 'text-anchor="start"')
+          : tag.replace(/>$/, ' text-anchor="start">');
+        return `${withAnchor}${[line1, line2, line3][i++]}${close}`;
       },
     );
     if (i !== 3) throw new Error(`${name}: expected 3 about lines, found ${i}`);
