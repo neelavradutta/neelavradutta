@@ -68,10 +68,10 @@ function trimHero(svg) {
     .replace('d="M166 76 C246 50 330 50 410 77"', 'd="M166 70 C246 44 330 44 410 71"');
 }
 
-/** Shrinks the label and figure inside each stat box. */
+/** Tweaks label + figure sizes inside each stat box. */
 function shrinkStats(svg) {
   return svg
-    .replace(/(<text x="\d+" y="126"[^>]*?)font-size="12"/g, '$1font-size="11"')
+    .replace(/(<text x="\d+" y="126"[^>]*?)font-size="12"/g, '$1font-size="13"')
     .replace(/(<text x="\d+" y=")166("[^>]*?)font-size="35"/g, '$1162$2font-size="28"');
 }
 
