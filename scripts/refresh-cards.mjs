@@ -105,6 +105,20 @@ function alignStatBoxes(svg) {
   return svg;
 }
 
+/** After subtitle strip, pull chips up + shrink card so title→boxes gap tight. */
+function tightenStats(svg) {
+  const ys = { 92: 76, 126: 110, 162: 146, 186: 170 };
+  svg = svg.replace(/ y="(\d+)"/g, (m, y) => {
+    const n = Number(y);
+    return ys[n] !== undefined ? ` y="${ys[n]}"` : m;
+  });
+  return svg
+    .replace(/height="260"/g, 'height="244"')
+    .replace(/height="259"/g, 'height="243"')
+    .replace('width="804" height="206"', 'width="804" height="190"')
+    .replace('viewBox="0 0 860 260"', 'viewBox="0 0 860 244"');
+}
+
 /** Drops the "> stack.scan" terminal flourish and its blinking cursor. */
 function trimStack(svg) {
   return matchSectionTitle(svg)
@@ -141,7 +155,7 @@ function roundCorners(svg) {
 
 const CUSTOMIZE = {
   hero: (svg) => roundCorners(trimHero(svg)),
-  stats: (svg) => roundCorners(alignStatBoxes(shrinkStats(svg))),
+  stats: (svg) => roundCorners(tightenStats(alignStatBoxes(shrinkStats(svg)))),
   stack: (svg) => roundCorners(trimStack(svg)),
   heatmap: (svg) => roundCorners(matchSectionTitle(svg)),
 };
@@ -488,7 +502,7 @@ function renderChip({ platform, label, handle }, index, light) {
 
 function connectReadmeBlock(links) {
   if (!links.length) {
-    return `## 🤝 Connect With Me\n\n`;
+    return `<h2 align="center">🤝 Connect With Me</h2>\n\n`;
   }
   const chips = links
     .map((link, i) => {
@@ -497,8 +511,10 @@ function connectReadmeBlock(links) {
       return `  <a href="${escapeXml(link.url)}"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-${n}-light.svg" /><img src="assets/chip-${n}.svg" alt="${alt}" height="50" /></picture></a>`;
     })
     .join('\n  &nbsp;&nbsp;\n');
-  return `## 🤝 Connect With Me\n\n<p align="center">\n${chips}\n</p>\n`;
+  return `<h2 align="center">🤝 Connect With Me</h2>\n\n<p align="center">\n${chips}\n</p>\n`;
 }
+
+const CONNECT_HEADING_RE = /(?:## 🤝 Connect With Me|<h2[^>]*>🤝 Connect With Me<\/h2>)/;
 
 /** Rebuild Connect chips from live GitHub social links and patch README. */
 async function refreshConnect() {
@@ -523,8 +539,8 @@ async function refreshConnect() {
   }
 
   const readme = await readFile('README.md', 'utf8');
-  if (!/## 🤝 Connect With Me/.test(readme)) throw new Error('connect: README missing Connect section');
-  const next = readme.replace(/## 🤝 Connect With Me[\s\S]*$/, connectReadmeBlock(links));
+  if (!CONNECT_HEADING_RE.test(readme)) throw new Error('connect: README missing Connect section');
+  const next = readme.replace(/(?:## 🤝 Connect With Me|<h2[^>]*>🤝 Connect With Me<\/h2>)[\s\S]*$/, connectReadmeBlock(links));
   await writeFile('README.md', next);
   console.log('updated README.md connect section', `(${links.length} chip${links.length === 1 ? '' : 's'})`);
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="860" height="260" viewBox="0 0 860 260" role="img" aria-label="stats section">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="860" height="244" viewBox="0 0 860 244" role="img" aria-label="stats section">
   <defs>
     <linearGradient id="gs-stats-neelavradutta-github-dark-dark-bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#0d1117"/>
@@ -51,7 +51,7 @@
       <stop offset="100%" stop-color="#e6edf3"/>
       <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
     </linearGradient>
-    <clipPath id="gs-stats-neelavradutta-github-dark-dark-round"><rect width="860" height="260" rx="32" ry="32"/></clipPath>
+    <clipPath id="gs-stats-neelavradutta-github-dark-dark-round"><rect width="860" height="244" rx="32" ry="32"/></clipPath>
   </defs>
   <style>
     #gs-stats-neelavradutta-github-dark-dark .aura-orb-a { animation: gs-stats-neelavradutta-github-dark-dark-float-a 9s ease-in-out infinite; }
@@ -101,7 +101,7 @@
     }
   </style>
   <g id="gs-stats-neelavradutta-github-dark-dark" clip-path="url(#gs-stats-neelavradutta-github-dark-dark-round)">
-    <rect width="860" height="260" rx="32" fill="url(#gs-stats-neelavradutta-github-dark-dark-bg)"/>
+    <rect width="860" height="244" rx="32" fill="url(#gs-stats-neelavradutta-github-dark-dark-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="47" rx="206" ry="120" fill="url(#gs-stats-neelavradutta-github-dark-dark-orb-0)"/>
     <ellipse class="aura-orb-b" cx="654" cy="57" rx="241" ry="109" fill="url(#gs-stats-neelavradutta-github-dark-dark-orb-1)"/>
@@ -111,33 +111,34 @@
     <circle class="aura-ring" cx="735" cy="82" r="20.88" fill="none" stroke="#e6edf3" stroke-opacity="0.36"/>
     <circle class="aura-ring-b" cx="735" cy="82" r="35.96" fill="none" stroke="#e6edf3" stroke-opacity="0.22"/>
     <circle class="aura-ring" cx="735" cy="82" r="58" fill="none" stroke="#e6edf3" stroke-opacity="0.14"/>
-    <rect x="28" y="26" width="804" height="206" rx="28" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.48"/>
+    <rect x="28" y="26" width="804" height="190" rx="28" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.48"/>
     <text class="nx-in" x="46" y="61" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="24" font-weight="850" letter-spacing="-0.4" fill="#e6edf3">GitHub Stats</text>
+    <text class="nx-in nx-in-2" x="48" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="650" letter-spacing="1.2" fill="#8b949e"></text>
     <g class="aura-chip" style="animation-delay:0ms">
-      <rect x="46" y="92" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
-      <text x="68" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Stars</text>
-      <text class="nx-num" style="animation-delay:350ms" x="68" y="162" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#58a6ff">2</text>
-      <rect x="68" y="186" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
-      <rect class="aura-bar" style="animation-delay:500ms" x="68" y="186" width="11" height="7" rx="3.5" fill="#58a6ff" opacity="0.9"/>
+      <rect x="46" y="76" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
+      <text x="68" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Stars</text>
+      <text x="68" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#58a6ff">2</text>
+      <rect x="68" y="170" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
+      <rect class="aura-bar" style="animation-delay:500ms" x="68" y="170" width="11" height="7" rx="3.5" fill="#58a6ff" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:100ms">
-      <rect x="242" y="92" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
-      <text x="264" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Contributions</text>
-      <text class="nx-num" style="animation-delay:450ms" x="264" y="162" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#2ad5ef">143</text>
-      <rect x="264" y="186" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
-      <rect class="aura-bar" style="animation-delay:600ms" x="264" y="186" width="136" height="7" rx="3.5" fill="#2ad5ef" opacity="0.9"/>
+      <rect x="242" y="76" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
+      <text x="264" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Contributions</text>
+      <text x="264" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#2ad5ef">143</text>
+      <rect x="264" y="170" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
+      <rect class="aura-bar" style="animation-delay:600ms" x="264" y="170" width="136" height="7" rx="3.5" fill="#2ad5ef" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:200ms">
-      <rect x="438" y="92" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
-      <text x="460" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Repos</text>
-      <text class="nx-num" style="animation-delay:550ms" x="460" y="162" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#a371f7">5</text>
-      <rect x="460" y="186" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
-      <rect class="aura-bar" style="animation-delay:700ms" x="460" y="186" width="11" height="7" rx="3.5" fill="#a371f7" opacity="0.9"/>
+      <rect x="438" y="76" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
+      <text x="460" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Repos</text>
+      <text x="460" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#a371f7">5</text>
+      <rect x="460" y="170" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
+      <rect class="aura-bar" style="animation-delay:700ms" x="460" y="170" width="11" height="7" rx="3.5" fill="#a371f7" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:300ms">
-      <rect x="634" y="92" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
-      <text x="656" y="126" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Followers</text>
-      <text class="nx-num" style="animation-delay:650ms" x="656" y="162" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#43d55c">2</text>
-      <rect x="656" y="186" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
-      <rect class="aura-bar" style="animation-delay:800ms" x="656" y="186" width="11" height="7" rx="3.5" fill="#43d55c" opacity="0.9"/>
+      <rect x="634" y="76" width="180" height="122" rx="24" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.72"/>
+      <text x="656" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#8b949e">Followers</text>
+      <text x="656" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#43d55c">2</text>
+      <rect x="656" y="170" width="136" height="7" rx="3.5" fill="rgba(255,255,255,0.1)"/>
+      <rect class="aura-bar" style="animation-delay:800ms" x="656" y="170" width="11" height="7" rx="3.5" fill="#43d55c" opacity="0.9"/>
     </g>
-    <rect x="0.5" y="0.5" width="859" height="259" rx="31.5" fill="none" stroke="#58a6ff" stroke-opacity="0.62"/>
+    <rect x="0.5" y="0.5" width="859" height="243" rx="31.5" fill="none" stroke="#58a6ff" stroke-opacity="0.62"/>
   </g>
 </svg>
