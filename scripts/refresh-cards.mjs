@@ -39,7 +39,8 @@ async function download(section, light) {
 function removeBranding(svg) {
   return svg
     .replace(/[ \t]*<text[^>]*>gitskins\.com<\/text>\r?\n?/gi, '')
-    .replace(/Live GitHub stats styled by GitSkins/g, 'Live GitHub stats')
+    .replace(/Live GitHub stats styled by GitSkins/g, '')
+    .replace(/[ \t]*<text[^>]*>Live GitHub stats<\/text>\r?\n?/gi, '')
     .replace(/aria-label="GitSkins gs-([a-z]+)-[^"]*section"/g, (_m, name) => `aria-label="${name} section"`)
     // The small pulsing dot GitSkins parks on the decorative rings.
     .replace(/[ \t]*<g transform="rotate\([^"]*\)">\s*<circle [^>]*r="4"[^>]*>\s*<animateTransform[\s\S]*?<\/g>\r?\n?/g, '');
@@ -53,17 +54,17 @@ function trimHero(svg) {
   return svg
     .replace(/[ \t]*<text x="168" y="150"[^>]*>[^<]*<\/text>\r?\n?/, '')
     .replace(/<g class="aura-chip"[\s\S]*?<\/g>\n(?=\s*<path)/, '')
+    // Drop the right-side TOTAL STARS badge (rings + count + label + optional star icon).
+    .replace(/[ \t]*<circle class="aura-ring[^"]*"[^>]*cx="735"[^/]*\/>\r?\n?/g, '')
+    .replace(/[ \t]*<circle class="aura-ring-b[^"]*"[^>]*cx="735"[^/]*\/>\r?\n?/g, '')
+    .replace(/[ \t]*<text[^>]*x="735"[^>]*>[^<]*<\/text>\r?\n?/g, '')
+    .replace(/[ \t]*<g transform="rotate\([^"]*735[^"]*\)"[\s\S]*?<\/g>\r?\n?/g, '')
     .replace('width="860" height="240" viewBox="0 0 860 240"', `width="860" height="${HERO_HEIGHT}" viewBox="0 0 860 ${HERO_HEIGHT}"`)
     .replace(/<rect width="860" height="240"/, `<rect width="860" height="${HERO_HEIGHT}"`)
     .replace(/<rect x="0.5" y="0.5" width="859" height="239"/, `<rect x="0.5" y="0.5" width="859" height="${HERO_HEIGHT - 1}"`)
     .replace(/(<rect x="26" y="26" width="808" height=")188"/, `$1${HERO_HEIGHT - 52}"`)
     .replace(/<ellipse([^>]*?)cy="(\d+)"([^>]*?)ry="(\d+)"/g, (_m, a, cy, b, ry) =>
       `<ellipse${a}cy="${Math.round(cy * scale)}"${b}ry="${Math.round(ry * scale)}"`)
-    .replace(/cx="735" cy="118"/g, 'cx="735" cy="88"')
-    .replace(/rotate\(-32 735 118\)/, 'rotate(-32 735 88)')
-    .replace(/cx="788.32" cy="118"/, 'cx="788.32" cy="88"')
-    .replace(/(<text x="735" y=")112"/, '$182"')
-    .replace(/(<text x="735" y=")134"/, '$1104"')
     .replace(/cx="96" cy="94"/g, `cx="96" cy="${shift(94)}"`)
     .replace(/x="51" y="49"/, `x="51" y="${shift(49)}"`)
     .replace(/(<text x="166" y=")69"/, `$1${shift(69)}"`)
@@ -203,11 +204,7 @@ const ANIMATE = {
     .replace(' x="51" y="43" width="90"', ' class="nx-avatar" x="51" y="43" width="90"')
     .replace('<circle cx="96" cy="88" r="48"', '<circle class="nx-ring-draw" stroke-dashoffset="302" cx="96" cy="88" r="48"')
     .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"')
-    .replace('<path d="M166 70 C246 44 330 44 410 71"', '<path class="nx-shine" stroke-dashoffset="260" d="M166 70 C246 44 330 44 410 71"')
-    .replace('<circle class="aura-ring" cx="735" cy="88" r="86"', '<circle class="aura-ring nx-spin" stroke-dasharray="7 11" cx="735" cy="88" r="86"')
-    .replace('<circle class="aura-ring-b" cx="735" cy="88"', '<circle class="aura-ring-b nx-spin-rev" stroke-dasharray="1 9" cx="735" cy="88"')
-    .replace('<text x="735" y="82"', '<text class="nx-num" style="animation-delay:800ms" x="735" y="82"')
-    .replace('<text x="735" y="104"', '<text class="nx-fade" style="animation-delay:950ms" x="735" y="104"'),
+    .replace('<path d="M166 70 C246 44 330 44 410 71"', '<path class="nx-shine" stroke-dashoffset="260" d="M166 70 C246 44 330 44 410 71"'),
 
   stats: (svg) => {
     svg = svg
