@@ -2,14 +2,16 @@
  * Re-downloads the GitSkins section cards and reapplies the local customizations,
  * so the numbers stay in sync with the live GitHub profile.
  *
- * assets/about.svg and assets/about-light.svg are hand-written and never touched here.
+ * Hand-written / locally customized — never overwritten here:
+ * - assets/about.svg, assets/about-light.svg
+ * - assets/social.svg, assets/social-light.svg
  */
 
 import { writeFile, mkdir } from 'node:fs/promises';
 
 const USERNAME = 'neelavradutta';
 const THEME = 'github-dark';
-const SECTIONS = ['hero', 'stack', 'heatmap', 'stats', 'social'];
+const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
 
 const HERO_HEIGHT = 176;

@@ -25,6 +25,6 @@
 ## 🤝 Connect With Me
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="assets/social-light.svg" /><img src="assets/social.svg" alt="neelavradutta social links" width="860" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/neelavradutta/neelavradutta/main/assets/social-light.svg?v=6" /><img src="https://raw.githubusercontent.com/neelavradutta/neelavradutta/main/assets/social.svg?v=6" alt="neelavradutta social links — GitHub Instagram Facebook Twitter" width="860" /></picture>
 </p>
 
