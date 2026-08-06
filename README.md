@@ -21,7 +21,7 @@
 
 
 
-## 🤝 Connect With Me
+<h2 align="center">🤝 Connect With Me</h2>
 
 <p align="center">
   <a href="https://leetcode.com/u/neelavra_dutta/"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-1-light.svg" /><img src="assets/chip-1.svg" alt="LeetCode neelavra_dutta" height="50" /></picture></a>

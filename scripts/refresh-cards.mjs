@@ -74,6 +74,7 @@ function trimHero(svg) {
 /** Tweaks label + figure sizes inside each stat box. */
 function shrinkStats(svg) {
   return svg
+    .replace(/>Profile Signal</g, '>GitHub Stats<')
     .replace(/(<text x="\d+" y="126"[^>]*?)font-size="12"/g, '$1font-size="13"')
     .replace(/(<text x="\d+" y=")166("[^>]*?)font-size="35"/g, '$1162$2font-size="28"');
 }
