@@ -91,7 +91,7 @@ async function refresh(section, light) {
   if (customize) svg = customize(svg);
 
   if (/gitskins/i.test(svg)) throw new Error(`${name}: branding survived the cleanup`);
-  if (section === 'hero' && /aura-chip/.test(svg)) throw new Error(`${name}: language chips survived the cleanup`);
+  if (section === 'hero' && /<g class="aura-chip"/.test(svg)) throw new Error(`${name}: language chips survived the cleanup`);
 
   await writeFile(`${OUT_DIR}/${name}`, svg);
   console.log('updated', name);
