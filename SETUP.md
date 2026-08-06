@@ -1,29 +1,30 @@
-# Use this as your GitHub profile
+# Make this your profile (easy)
 
-Zero config. No script edits. Cards pull from **your** GitHub profile.
+**You need:** GitHub username, and a repo named the **same** as that username.
 
-## Requirements
+## Do this
 
-- Repo name **must equal** your GitHub username (`alice/alice`)
-- [GitHub Actions](https://docs.github.com/en/actions) enabled on the repo
-- Profile fields filled (name, bio, location, social accounts) — refresh reads these
+1. Open this repo → green **Use this template** → name the new repo **exactly** your username (example: `bob` makes `bob/bob`). Keep it **Public**.
+2. Fill your [profile](https://github.com/settings/profile): name, bio, location, social links.
+3. Wait ~1–2 minutes. Cards refresh **by themselves** (Actions runs on the first push). Then open `https://github.com/<you>`.
 
-## Steps
+That’s it.
 
-1. On the template repo → **Use this template** → create a new repository named **exactly** your username.
-2. Edit your [GitHub profile](https://github.com/settings/profile): name, bio, location, and social links (these become hero / About / Connect).
-3. **Actions** → **Refresh profile cards** → **Run workflow**. Wait for it to finish, then open `https://github.com/<you>`.
+---
 
-Daily refresh runs automatically. Re-run the workflow anytime after you change profile data.
+### If cards still show someone else’s face
 
-## Local refresh (optional)
+1. Open your new repo → **Actions** tab  
+2. If GitHub asks, click **I understand my workflows, go ahead and enable them**  
+3. Left: **Refresh profile cards** → **Run workflow** → **Run workflow**  
+4. Wait for green check, refresh your profile page
+
+### Owner tip
+
+Turn on **Settings → General → Template repository** so the green button appears for others.
+
+### Local (optional)
 
 ```bash
 PROFILE_USERNAME=your-username node scripts/refresh-cards.mjs
 ```
-
-In GitHub Actions, username comes from `GITHUB_REPOSITORY` automatically.
-
-## Template owners
-
-Repo **Settings → General → Template repository** = ON so others can click **Use this template**.
