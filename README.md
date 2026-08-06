@@ -1,5 +1,5 @@
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/hero?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/hero?username=neelavradutta&theme=github-dark" alt="NEELAVRA DUTTA profile hero" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/hero-light.svg" /><img src="assets/hero.svg" alt="NEELAVRA DUTTA profile hero" width="860" /></picture>
 </p>
 
 <p align="center">
@@ -7,17 +7,17 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/stack?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/stack?username=neelavradutta&theme=github-dark" alt="Language stack" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/stack-light.svg" /><img src="assets/stack.svg" alt="Language stack" width="860" /></picture>
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/heatmap?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/heatmap?username=neelavradutta&theme=github-dark" alt="Contribution Activity" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/heatmap-light.svg" /><img src="assets/heatmap.svg" alt="Contribution Activity" width="860" /></picture>
 </p>
 
 ## 📊 GitHub Stats
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/stats?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/stats?username=neelavradutta&theme=github-dark" alt="GitHub Stats" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/stats-light.svg" /><img src="assets/stats.svg" alt="GitHub Stats" width="860" /></picture>
 </p>
 
 
@@ -25,6 +25,6 @@
 ## 🤝 Connect With Me
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/social?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/social?username=neelavradutta&theme=github-dark" alt="neelavradutta social links" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/social-light.svg" /><img src="assets/social.svg" alt="neelavradutta social links" width="860" /></picture>
 </p>
 
