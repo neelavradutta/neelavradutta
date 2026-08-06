@@ -16,8 +16,6 @@ const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
 /** Max chars per bio line before forced wrap (≈ full inner card width at 20px). */
 const ABOUT_LINE_CHARS = 78;
-/** Stretch each bio line from x=46 across the card (ends ~x=806). */
-const ABOUT_TEXT_LENGTH = 760;
 const MAX_CONNECT = 4;
 
 const HERO_HEIGHT = 176;
@@ -359,8 +357,7 @@ function wrapBioGreedy(words) {
 }
 
 /**
- * Split bio into 3 balanced lines that start left and can stretch across the card.
- * Prefer even lengths so textLength fill does not look sparse on a short last line.
+ * Split bio into 3 balanced left-aligned lines (no stretch / textLength).
  */
 function wrapBio(bio) {
   const words = bio.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
@@ -416,20 +413,9 @@ async function refreshAbout(bio) {
     const next = svg.replace(
       /(<text class="line(?: line-[23])?"[^>]*>)([^<]*)(<\/text>)/g,
       (_m, open, _old, close) => {
-        let tag = open;
-        if (!/textLength=/.test(tag)) {
-          tag = tag.replace(
-            />$/,
-            ` textLength="${ABOUT_TEXT_LENGTH}" lengthAdjust="spacingAndGlyphs">`,
-          );
-        } else {
-          tag = tag
-            .replace(/textLength="[^"]*"/, `textLength="${ABOUT_TEXT_LENGTH}"`)
-            .replace(/lengthAdjust="[^"]*"/, 'lengthAdjust="spacingAndGlyphs"');
-          if (!/lengthAdjust=/.test(tag)) {
-            tag = tag.replace(/>$/, ' lengthAdjust="spacingAndGlyphs">');
-          }
-        }
+        const tag = open
+          .replace(/\s*textLength="[^"]*"/g, '')
+          .replace(/\s*lengthAdjust="[^"]*"/g, '');
         return `${tag}${[line1, line2, line3][i++]}${close}`;
       },
     );
