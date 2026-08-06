@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://www.gitskins.com/api/section/about?username=neelavradutta&theme=github-dark&mode=light" /><img src="https://www.gitskins.com/api/section/about?username=neelavradutta&theme=github-dark" alt="About NEELAVRA DUTTA" /></picture>
+  <img src="assets/about.svg" alt="Full-Stack Developer specializing in Python, FastAPI, Next.js, React, MySQL, and Computer Vision. Passionate about AI-driven applications, scalable software, and clean architecture." width="860" />
 </p>
 
 <p align="center">
