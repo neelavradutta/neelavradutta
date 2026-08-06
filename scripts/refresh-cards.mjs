@@ -371,7 +371,7 @@ async function refreshAbout(bio) {
         const tag = open
           .replace(/\s*textLength="[^"]*"/g, '')
           .replace(/\s*lengthAdjust="[^"]*"/g, '')
-          .replace(/\bfont-weight="[^"]*"/, 'font-weight="800"')
+          .replace(/\bfont-weight="[^"]*"/, 'font-weight="900"')
           .replace(/\bfont-size="[^"]*"/, 'font-size="18"')
           .replace(/\bletter-spacing="[^"]*"/, 'letter-spacing="0"');
         const withAnchor = /\btext-anchor=/.test(tag)
