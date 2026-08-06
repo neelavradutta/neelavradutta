@@ -5,12 +5,31 @@
  * Hand-written / locally customized — never overwritten here:
  * - assets/social.svg, assets/social-light.svg
  * About cards keep their design; only the bio lines are refreshed from GitHub.
+ * Empty GitHub bio → About block removed from README (section hidden).
  * Connect chips are regenerated strictly from GitHub social_accounts (and blog if set).
+ * No social links → Connect With Me removed from README (section hidden).
  */
 
 import { writeFile, mkdir, readFile, unlink } from 'node:fs/promises';
 
-const USERNAME = 'neelavradutta';
+/**
+ * PROFILE_USERNAME (local override) → GITHUB_REPOSITORY owner (Actions).
+ * Fail loud if neither set — no silent personal default.
+ */
+function resolveUsername() {
+  const fromEnv = process.env.PROFILE_USERNAME?.trim();
+  if (fromEnv) return fromEnv;
+  const repo = process.env.GITHUB_REPOSITORY?.trim();
+  if (repo?.includes('/')) {
+    const owner = repo.split('/')[0];
+    if (owner) return owner;
+  }
+  throw new Error(
+    'username unset: set PROFILE_USERNAME or run in GitHub Actions (GITHUB_REPOSITORY)',
+  );
+}
+
+const USERNAME = resolveUsername();
 const THEME = 'github-dark';
 const SECTIONS = ['hero', 'stack', 'heatmap', 'stats'];
 const OUT_DIR = 'assets';
@@ -20,6 +39,8 @@ const MAX_CONNECT = 4;
 
 const HERO_HEIGHT = 176;
 const HERO_SHIFT = 6;
+
+console.log('refreshing for', USERNAME);
 
 function url(section, light) {
   const base = `https://www.gitskins.com/api/section/${section}?username=${USERNAME}&theme=${THEME}`;
@@ -313,7 +334,7 @@ async function refresh(section, light, profile = {}) {
 }
 
 function githubHeaders() {
-  const headers = { 'User-Agent': 'neelavradutta-profile-refresh', Accept: 'application/vnd.github+json' };
+  const headers = { 'User-Agent': `${USERNAME}-profile-refresh`, Accept: 'application/vnd.github+json' };
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
   return headers;
 }
@@ -326,7 +347,7 @@ function escapeXml(value) {
     .replace(/"/g, '&quot;');
 }
 
-/** Fetches live GitHub profile fields (bio + location). */
+/** Fetches live GitHub profile fields (bio + location + display name). */
 async function fetchProfile() {
   const response = await fetch(`https://api.github.com/users/${USERNAME}`, { headers: githubHeaders() });
   if (!response.ok) throw new Error(`profile: GitHub API HTTP ${response.status}`);
@@ -334,6 +355,7 @@ async function fetchProfile() {
   return {
     bio: data.bio?.trim() || '',
     location: data.location?.trim() || '',
+    name: data.name?.trim() || data.login || USERNAME,
   };
 }
 
@@ -357,13 +379,40 @@ function wrapBio(bio) {
   return lines.slice(0, 3).map(escapeXml);
 }
 
-/** Updates only the three bio <text> nodes inside the hand-made About cards. */
-async function refreshAbout(bio) {
-  if (!bio) throw new Error('about: GitHub bio is empty');
+const ABOUT_README_RE =
+  /\r?\n*<p align="center">\s*\r?\n\s*<picture>(?:(?!<\/picture>)[\s\S])*assets\/about\.svg(?:(?!<\/picture>)[\s\S])*<\/picture>\s*\r?\n<\/p>\r?\n*/;
+
+const HERO_README_RE =
+  /(<p align="center">\s*\r?\n\s*<picture>(?:(?!<\/picture>)[\s\S])*assets\/hero\.svg(?:(?!<\/picture>)[\s\S])*<\/picture>\s*\r?\n<\/p>)/;
+
+function aboutReadmeBlock(bio) {
+  return `
+<p align="center">
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/about-light.svg" /><img src="assets/about.svg" alt="${escapeXml(bio)}" width="860" /></picture>
+</p>
+`;
+}
+
+/** Sync About SVGs + README. Empty bio hides the About section entirely. */
+async function refreshAbout(bio, displayName = USERNAME) {
+  let readme = await readFile('README.md', 'utf8');
+
+  if (!bio) {
+    if (!ABOUT_README_RE.test(readme)) {
+      console.log('About section already absent (bio empty)');
+      return;
+    }
+    await writeFile('README.md', readme.replace(ABOUT_README_RE, '\n'));
+    console.log('removed About section (bio empty)');
+    return;
+  }
+
+  const aria = escapeXml(`About ${displayName}`);
   const [line1, line2, line3] = wrapBio(bio);
   for (const name of ['about.svg', 'about-light.svg']) {
     const path = `${OUT_DIR}/${name}`;
     let svg = await readFile(path, 'utf8');
+    svg = svg.replace(/aria-label="[^"]*"/, `aria-label="${aria}"`);
     let i = 0;
     const next = svg.replace(
       /(<text class="line(?: line-[23])?"[^>]*>)([^<]*)(<\/text>)/g,
@@ -389,6 +438,16 @@ async function refreshAbout(bio) {
     await writeFile(path, next);
     console.log('updated', name);
   }
+
+  readme = await readFile('README.md', 'utf8');
+  const block = aboutReadmeBlock(bio);
+  if (ABOUT_README_RE.test(readme)) {
+    await writeFile('README.md', readme.replace(ABOUT_README_RE, `\n${block}`));
+  } else {
+    if (!HERO_README_RE.test(readme)) throw new Error('about: could not find hero block to insert About after');
+    await writeFile('README.md', readme.replace(HERO_README_RE, `$1\n${block}`));
+  }
+  console.log('updated README.md About section');
 }
 
 const ICONS = {
@@ -567,9 +626,7 @@ function renderChip({ platform, label, handle }, index, light) {
 }
 
 function connectReadmeBlock(links) {
-  if (!links.length) {
-    return `<h2 align="center">🤝 Connect With Me</h2>\n\n`;
-  }
+  if (!links.length) return '';
   const chips = links
     .map((link, i) => {
       const n = i + 1;
@@ -580,7 +637,7 @@ function connectReadmeBlock(links) {
   return `<h2 align="center">🤝 Connect With Me</h2>\n\n<p align="center">\n${chips}\n</p>\n`;
 }
 
-const CONNECT_HEADING_RE = /(?:## 🤝 Connect With Me|<h2[^>]*>🤝 Connect With Me<\/h2>)/;
+const CONNECT_SECTION_RE = /(?:## 🤝 Connect With Me|<h2[^>]*>🤝 Connect With Me<\/h2>)[\s\S]*$/;
 
 /** Rebuild Connect chips from live GitHub social links and patch README. */
 async function refreshConnect() {
@@ -605,16 +662,32 @@ async function refreshConnect() {
   }
 
   const readme = await readFile('README.md', 'utf8');
-  if (!CONNECT_HEADING_RE.test(readme)) throw new Error('connect: README missing Connect section');
-  const next = readme.replace(/(?:## 🤝 Connect With Me|<h2[^>]*>🤝 Connect With Me<\/h2>)[\s\S]*$/, connectReadmeBlock(links));
-  await writeFile('README.md', next);
+  const hasConnect = CONNECT_SECTION_RE.test(readme);
+
+  if (!links.length) {
+    if (!hasConnect) {
+      console.log('Connect section already absent (no social links)');
+      return;
+    }
+    await writeFile('README.md', readme.replace(CONNECT_SECTION_RE, '').replace(/\n{3,}$/g, '\n'));
+    console.log('removed Connect With Me (no social links)');
+    return;
+  }
+
+  const block = connectReadmeBlock(links);
+  if (hasConnect) {
+    await writeFile('README.md', readme.replace(CONNECT_SECTION_RE, block));
+  } else {
+    const base = readme.replace(/\s*$/, '\n\n');
+    await writeFile('README.md', `${base}${block}`);
+  }
   console.log('updated README.md connect section', `(${links.length} chip${links.length === 1 ? '' : 's'})`);
 }
 
 await mkdir(OUT_DIR, { recursive: true });
 
 const failures = [];
-let profile = { bio: '', location: '' };
+let profile = { bio: '', location: '', name: USERNAME };
 try {
   profile = await fetchProfile();
   if (profile.location) console.log('profile location:', profile.location);
@@ -635,7 +708,7 @@ for (const section of SECTIONS) {
 }
 
 try {
-  await refreshAbout(profile.bio);
+  await refreshAbout(profile.bio, profile.name);
 } catch (error) {
   failures.push(error.message);
   console.error('failed', error.message);

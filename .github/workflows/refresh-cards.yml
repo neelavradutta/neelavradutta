@@ -1,5 +1,8 @@
 name: Refresh profile cards
 
+# Username is auto-detected from GITHUB_REPOSITORY (repo owner).
+# Override locally with PROFILE_USERNAME. See SETUP.md.
+
 on:
   schedule:
     - cron: '17 3 * * *'
