@@ -72,13 +72,13 @@
     @keyframes gs-heatmap-neelavradutta-github-dark-dark-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
   </style>
   <g id="gs-heatmap-neelavradutta-github-dark-dark">
-    <rect width="860" height="230" rx="20" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-bg)"/>
+    <rect width="860" height="230" rx="32" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="41" rx="206" ry="106" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-orb-0)"/>
     <ellipse class="aura-orb-b" cx="654" cy="51" rx="241" ry="97" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-orb-1)"/>
     <ellipse class="aura-orb-c" cx="499" cy="202" rx="310" ry="78" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-orb-2)"/>
     <ellipse class="aura-orb-b" cx="826" cy="179" rx="172" ry="97" fill="url(#gs-heatmap-neelavradutta-github-dark-dark-orb-3)"/>
-    <rect x="28" y="26" width="804" height="178" rx="20" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.48"/>
+    <rect x="28" y="26" width="804" height="178" rx="28" fill="rgba(8,8,12,0.5)" stroke="#58a6ff" stroke-opacity="0.48"/>
     <text x="46" y="60" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="24" font-weight="850" letter-spacing="-0.4" fill="#e6edf3">Contribution Activity</text>
     <text x="48" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="650" letter-spacing="0.6" fill="#8b949e">172 contributions in the last year</text>
     <text x="648" y="72" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="11" fill="#8b949e" text-anchor="end">Less</text>
@@ -1935,6 +1935,6 @@
     <set attributeName="opacity" to="0.55" begin="0.2s"/>
     <set attributeName="opacity" to="0" begin="2.4s" fill="freeze"/>
   </rect>
-    <rect x="0.5" y="0.5" width="859" height="229" rx="19.5" fill="none" stroke="#58a6ff" stroke-opacity="0.62"/>
+    <rect x="0.5" y="0.5" width="859" height="229" rx="31.5" fill="none" stroke="#58a6ff" stroke-opacity="0.62"/>
   </g>
 </svg>

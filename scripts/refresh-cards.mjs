@@ -75,6 +75,21 @@ function shrinkStats(svg) {
     .replace(/(<text x="\d+" y=")166("[^>]*?)font-size="35"/g, '$1162$2font-size="28"');
 }
 
+/**
+ * Re-spaces the four stat boxes so they sit a uniform 18px from the outer frame
+ * (GitSkins renders them only 6px from the left/right edges) with even 16px gaps.
+ * Box x: 34/238/442/646 -> 46/242/438/634; inner content keeps its 22px inset.
+ */
+function alignStatBoxes(svg) {
+  const boxes = { 34: 46, 238: 242, 442: 438, 646: 634 };
+  for (const [from, to] of Object.entries(boxes)) {
+    svg = svg
+      .replace(new RegExp(`x="${from}" y="92"`, 'g'), `x="${to}" y="92"`)
+      .replace(new RegExp(`x="${Number(from) + 22}"`, 'g'), `x="${Number(to) + 22}"`);
+  }
+  return svg;
+}
+
 /** Drops the "> stack.scan" terminal flourish and its blinking cursor. */
 function trimStack(svg) {
   return svg
@@ -82,10 +97,22 @@ function trimStack(svg) {
     .replace(/[ \t]*<text class="aura-cursor" x="786"[^>]*>_<\/text>\r?\n?/, '');
 }
 
+/** Soften every card / panel corner so sections match the rounder local look. */
+function roundCorners(svg) {
+  return svg
+    .replace(/width="860" height="(\d+)" rx="20"/g, 'width="860" height="$1" rx="32"')
+    .replace(/width="859" height="(\d+)" rx="19\.5"/g, 'width="859" height="$1" rx="31.5"')
+    .replace(/(width="804" height="\d+" )rx="20"/g, '$1rx="28"')
+    .replace(/(width="808" height="\d+" )rx="20"/g, '$1rx="28"')
+    .replace(/(width="808" height="\d+" )rx="22"/g, '$1rx="28"')
+    .replace(/(width="180" height="122" )rx="18"/g, '$1rx="24"');
+}
+
 const CUSTOMIZE = {
-  hero: trimHero,
-  stats: shrinkStats,
-  stack: trimStack,
+  hero: (svg) => roundCorners(trimHero(svg)),
+  stats: (svg) => roundCorners(alignStatBoxes(shrinkStats(svg))),
+  stack: (svg) => roundCorners(trimStack(svg)),
+  heatmap: roundCorners,
 };
 
 /**

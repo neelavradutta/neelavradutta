@@ -99,7 +99,7 @@
     }
   </style>
   <g id="gs-hero-neelavradutta-github-dark-light">
-    <rect width="860" height="176" rx="20" fill="url(#gs-hero-neelavradutta-github-dark-light-bg)"/>
+    <rect width="860" height="176" rx="32" fill="url(#gs-hero-neelavradutta-github-dark-light-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="32" rx="206" ry="81" fill="url(#gs-hero-neelavradutta-github-dark-light-orb-0)"/>
     <ellipse class="aura-orb-b" cx="654" cy="39" rx="241" ry="74" fill="url(#gs-hero-neelavradutta-github-dark-light-orb-1)"/>
@@ -109,7 +109,7 @@
     <circle class="aura-ring" cx="735" cy="88" r="30.959999999999997" fill="none" stroke="#0f172a" stroke-opacity="0.36"/>
     <circle class="aura-ring-b nx-spin-rev" stroke-dasharray="1 9" cx="735" cy="88" r="53.32" fill="none" stroke="#0f172a" stroke-opacity="0.22"/>
     <circle class="aura-ring nx-spin" stroke-dasharray="7 11" cx="735" cy="88" r="86" fill="none" stroke="#0f172a" stroke-opacity="0.14"/>
-    <rect x="26" y="26" width="808" height="124" rx="20" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
+    <rect x="26" y="26" width="808" height="124" rx="28" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
     <text class="nx-num" style="animation-delay:800ms" x="735" y="82" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="34" font-weight="900" letter-spacing="-1" fill="#1a85ff">2</text>
     <text class="nx-fade" style="animation-delay:950ms" x="735" y="104" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="10" font-weight="800" letter-spacing="2.6" fill="#475569">TOTAL STARS</text>
     <clipPath id="gs-hero-neelavradutta-github-dark-light-av"><circle cx="96" cy="88" r="45"/></clipPath>
@@ -118,6 +118,6 @@
     <text class="nx-handle" x="166" y="63" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="2.6" fill="#475569" text-transform="uppercase">@neelavradutta</text>
     <text clip-path="url(#gs-hero-neelavradutta-github-dark-light-namewipe)" x="166" y="116" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="46" font-weight="850" letter-spacing="-1.5" fill="#0f172a">NEELAVRA DUTTA</text>
         <path class="nx-shine" stroke-dashoffset="260" d="M166 70 C246 44 330 44 410 71" fill="none" stroke="url(#gs-hero-neelavradutta-github-dark-light-shine)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-    <rect x="0.5" y="0.5" width="859" height="175" rx="19.5" fill="none" stroke="#d7dee8" stroke-opacity="0.62"/>
+    <rect x="0.5" y="0.5" width="859" height="175" rx="31.5" fill="none" stroke="#d7dee8" stroke-opacity="0.62"/>
   </g>
 </svg>

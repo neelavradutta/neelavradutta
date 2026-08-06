@@ -54,7 +54,7 @@
     @keyframes draw { to { stroke-dashoffset: 0; } }
   </style>
   <g>
-    <rect width="860" height="240" rx="20" fill="url(#about-bg)"/>
+    <rect width="860" height="240" rx="32" fill="url(#about-bg)"/>
     <ellipse class="orb-a" cx="138" cy="42" rx="206" ry="102" fill="url(#about-orb-0)"/>
     <ellipse class="orb-b" cx="654" cy="52" rx="241" ry="94" fill="url(#about-orb-1)"/>
     <ellipse class="orb-c" cx="499" cy="212" rx="310" ry="76" fill="url(#about-orb-2)"/>
@@ -62,7 +62,7 @@
     <circle class="ring" cx="752" cy="120" r="25.2" fill="none" stroke="#1f2328" stroke-opacity="0.36"/>
     <circle class="ring-b" cx="752" cy="120" r="43.4" fill="none" stroke="#1f2328" stroke-opacity="0.22"/>
     <circle class="ring" cx="752" cy="120" r="70" fill="none" stroke="#1f2328" stroke-opacity="0.14"/>
-    <rect x="26" y="24" width="808" height="192" rx="20" fill="rgba(255,255,255,0.62)" stroke="#0969da" stroke-opacity="0.4"/>
+    <rect x="26" y="24" width="808" height="192" rx="28" fill="rgba(255,255,255,0.62)" stroke="#0969da" stroke-opacity="0.4"/>
     <path class="sweep" d="M46 70 H 118" fill="none" stroke="#0969da" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-dasharray="72" stroke-dashoffset="72"/>
     <text class="label" x="48" y="60" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="11" font-weight="800" letter-spacing="4" fill="#57606a">ABOUT</text>
     <text class="line" x="46" y="96" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="800" letter-spacing="-0.3" fill="#1f2328">Full-Stack Developer specializing in Python, FastAPI, Next.js,</text>
@@ -72,6 +72,6 @@
       <text x="48" y="192" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="750" fill="#0969da">&gt; open to collaboration</text>
       <text class="cursor" x="211" y="192" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#0969da">_</text>
     </g>
-    <rect x="0.5" y="0.5" width="859" height="239" rx="19.5" fill="none" stroke="#0969da" stroke-opacity="0.5"/>
+    <rect x="0.5" y="0.5" width="859" height="239" rx="31.5" fill="none" stroke="#0969da" stroke-opacity="0.5"/>
   </g>
 </svg>
