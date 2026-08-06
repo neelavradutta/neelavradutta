@@ -5,7 +5,7 @@
  * Hand-written / locally customized — never overwritten here:
  * - assets/social.svg, assets/social-light.svg
  * About cards keep their design; only the bio lines are refreshed from GitHub.
- * Connect chips are regenerated from GitHub social_accounts (plus the profile URL).
+ * Connect chips are regenerated strictly from GitHub social_accounts (and blog if set).
  */
 
 import { writeFile, mkdir, readFile, unlink } from 'node:fs/promises';
@@ -373,16 +373,11 @@ function handleFromUrl(platform, rawUrl) {
 
 async function fetchSocialLinks() {
   const headers = githubHeaders();
-  const [userRes, socialRes] = await Promise.all([
-    fetch(`https://api.github.com/users/${USERNAME}`, { headers }),
-    fetch(`https://api.github.com/users/${USERNAME}/social_accounts`, { headers }),
-  ]);
-  if (!userRes.ok) throw new Error(`connect: profile HTTP ${userRes.status}`);
+  const socialRes = await fetch(`https://api.github.com/users/${USERNAME}/social_accounts`, { headers });
   if (!socialRes.ok) throw new Error(`connect: social_accounts HTTP ${socialRes.status}`);
 
-  const user = await userRes.json();
   const social = await socialRes.json();
-  const links = [{ url: user.html_url || `https://github.com/${USERNAME}`, provider: 'github' }];
+  const links = [];
 
   for (const item of social) {
     if (!item?.url) continue;
@@ -392,12 +387,22 @@ async function fetchSocialLinks() {
     if (links.length >= MAX_CONNECT) break;
   }
 
-  if (links.length < MAX_CONNECT && user.blog?.trim()) {
-    let blog = user.blog.trim();
-    if (!/^https?:\/\//i.test(blog)) blog = `https://${blog}`;
-    const normalized = blog.replace(/\/+$/, '');
-    if (!links.some((l) => l.url.replace(/\/+$/, '') === normalized)) {
-      links.push({ url: blog, provider: 'generic' });
+  if (links.length < MAX_CONNECT) {
+    try {
+      const userRes = await fetch(`https://api.github.com/users/${USERNAME}`, { headers });
+      if (userRes.ok) {
+        const user = await userRes.json();
+        if (user.blog?.trim()) {
+          let blog = user.blog.trim();
+          if (!/^https?:\/\//i.test(blog)) blog = `https://${blog}`;
+          const normalized = blog.replace(/\/+$/, '');
+          if (!links.some((l) => l.url.replace(/\/+$/, '') === normalized)) {
+            links.push({ url: blog, provider: 'generic' });
+          }
+        }
+      }
+    } catch {
+      /* blog is optional; social_accounts alone is enough */
     }
   }
 
@@ -474,6 +479,9 @@ function renderChip({ platform, label, handle }, index, light) {
 }
 
 function connectReadmeBlock(links) {
+  if (!links.length) {
+    return `## 🤝 Connect With Me\n\n`;
+  }
   const chips = links
     .map((link, i) => {
       const n = i + 1;
@@ -487,7 +495,6 @@ function connectReadmeBlock(links) {
 /** Rebuild Connect chips from live GitHub social links and patch README. */
 async function refreshConnect() {
   const links = await fetchSocialLinks();
-  if (!links.length) throw new Error('connect: no social links resolved');
 
   for (let i = 0; i < links.length; i++) {
     const n = i + 1;
