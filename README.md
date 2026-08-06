@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/about.svg" alt="Full-Stack Developer specializing in Python, FastAPI, Next.js, React, MySQL, and Computer Vision. Passionate about AI-driven applications, scalable software, and clean architecture." width="860" />
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/about-light.svg" /><img src="assets/about.svg" alt="Full-Stack Developer specializing in Python, FastAPI, Next.js, React, MySQL, and Computer Vision. Passionate about AI-driven applications, scalable software, and clean architecture." width="860" /></picture>
 </p>
 
 <p align="center">
