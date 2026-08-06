@@ -1,65 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="190" height="58" viewBox="0 -4 190 58" role="img" aria-label="Twitter">
+<svg xmlns="http://www.w3.org/2000/svg" width="190" height="50" viewBox="0 0 190 50" role="img" aria-label="Twitter">
   <defs>
-    <linearGradient id="holo-tw" x1="0" y1="0" x2="1" y2="1">
-      <stop class="h0" offset="0%" stop-color="#e6edf3"/>
-      <stop class="h1" offset="18%" stop-color="#0d1117"/>
-      <stop class="h2" offset="38%" stop-color="#58a6ff"/>
-      <stop class="h3" offset="58%" stop-color="#8b949e"/>
-      <stop class="h4" offset="78%" stop-color="#0d1117"/>
-      <stop class="h5" offset="100%" stop-color="#e6edf3"/>
+    <linearGradient id="holo-tw-l" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="18%" stop-color="#f6f8fc"/>
+      <stop offset="38%" stop-color="#0069e0"/>
+      <stop offset="58%" stop-color="#475569"/>
+      <stop offset="78%" stop-color="#f6f8fc"/>
+      <stop offset="100%" stop-color="#0f172a"/>
       <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
     </linearGradient>
-    <linearGradient id="glint-tw" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-    </linearGradient>
-    <clipPath id="clip-tw"><rect x="1" y="2" width="188" height="46" rx="23"/></clipPath>
   </defs>
-  <style>
-    .shell { transform-box: fill-box; transform-origin: center; transition: transform 320ms cubic-bezier(0.34,1.56,0.64,1), filter 280ms ease; }
-    .icon { transform-box: fill-box; transform-origin: center; transition: transform 360ms cubic-bezier(0.34,1.56,0.64,1); }
-    .rim { transition: stroke-opacity 220ms ease; }
-    .glint { opacity: 0; pointer-events: none; }
-    .fill { fill: #161b22; }
-    .ink { fill: #e6edf3; }
-    .mute { fill: #8b949e; }
-    .disc { fill: #ffffff; fill-opacity: 0.16; }
-    .mark { fill: #ffffff; }
-    .edge { stroke: #ffffff; stroke-opacity: 0.22; }
-    @media (prefers-color-scheme: light) {
-      .fill { fill: #ffffff; }
-      .ink { fill: #0f172a; }
-      .mute { fill: #475569; }
-      .disc { fill: #0f172a; fill-opacity: 0.1; }
-      .mark { fill: #0f172a; }
-      .edge { stroke: #0f172a; stroke-opacity: 0.08; }
-      .h0, .h5 { stop-color: #0f172a; }
-      .h1, .h4 { stop-color: #f6f8fc; }
-      .h2 { stop-color: #0069e0; }
-      .h3 { stop-color: #475569; }
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      svg:hover .shell { transform: translateY(-5px) scale(1.045); filter: brightness(1.1) drop-shadow(0 10px 14px rgba(88,166,255,0.28)); }
-      svg:hover .icon { transform: scale(1.16) rotate(-8deg); }
-      svg:hover .rim { stroke-opacity: 0.55; }
-      svg:hover .glint { animation: glint 700ms cubic-bezier(0.16,1,0.3,1) both; }
-      @keyframes glint { from { opacity: 0; transform: translateX(-100px); } 35% { opacity: 1; } to { opacity: 0; transform: translateX(210px); } }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      svg:hover .shell { filter: brightness(1.08); }
-    }
-  </style>
-  <g class="shell">
-    <rect class="fill" fill="#161b22" x="1" y="2" width="188" height="46" rx="23" stroke="url(#holo-tw)" stroke-width="2"/>
-    <rect class="edge rim" stroke="#ffffff" stroke-opacity="0.22" x="2" y="3" width="186" height="44" rx="22" fill="none" stroke-width="1"/>
-    <g clip-path="url(#clip-tw)"><rect class="glint" x="0" y="2" width="56" height="46" fill="url(#glint-tw)"/></g>
-    <circle class="disc icon" fill="#ffffff" fill-opacity="0.16" cx="28" cy="25" r="12"/>
-    <g class="icon" transform="translate(28,25) scale(0.5) translate(-12,-12)">
-      <path class="mark" fill="#ffffff" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
-    </g>
-    <text class="mute" fill="#8b949e" x="49" y="21" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="10" font-weight="850" letter-spacing="1.2">Twitter</text>
-    <text class="ink" fill="#e6edf3" x="49" y="37" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800">@Neel_avra1</text>
+  <rect x="1" y="2" width="188" height="46" rx="23" fill="#ffffff" stroke="url(#holo-tw-l)" stroke-width="2"/>
+  <rect x="2" y="3" width="186" height="44" rx="22" fill="none" stroke="#0f172a" stroke-opacity="0.08"/>
+  <circle cx="28" cy="25" r="12" fill="#0f172a" fill-opacity="0.1"/>
+  <g transform="translate(28,25) scale(0.5) translate(-12,-12)">
+    <path fill="#0f172a" d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/>
   </g>
+  <text x="49" y="21" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="10" font-weight="850" letter-spacing="1.2" fill="#475569">Twitter</text>
+  <text x="49" y="37" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" fill="#0f172a">@Neel_avra1</text>
 </svg>
