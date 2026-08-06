@@ -25,6 +25,9 @@
 ## 🤝 Connect With Me
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/neelavradutta/neelavradutta/main/assets/social-light.svg?v=6" /><img src="https://raw.githubusercontent.com/neelavradutta/neelavradutta/main/assets/social.svg?v=6" alt="neelavradutta social links — GitHub Instagram Facebook Twitter" width="860" /></picture>
+  <a href="https://github.com/neelavradutta"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-github-light.svg" /><img src="assets/chip-github.svg" alt="GitHub @neelavradutta" height="50" /></picture></a>
+  <a href="https://www.instagram.com/toeiooo.so/"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-instagram-light.svg" /><img src="assets/chip-instagram.svg" alt="Instagram @toeiooo.so" height="50" /></picture></a>
+  <a href="https://leetcode.com/u/neelavra_dutta/"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-leetcode-light.svg" /><img src="assets/chip-leetcode.svg" alt="LeetCode neelavra_dutta" height="50" /></picture></a>
+  <a href="https://x.com/Neel_avra"><picture><source media="(prefers-color-scheme: light)" srcset="assets/chip-twitter-light.svg" /><img src="assets/chip-twitter.svg" alt="Twitter @Neel_avra" height="50" /></picture></a>
 </p>
 

@@ -86,14 +86,74 @@ const CUSTOMIZE = {
   stack: trimStack,
 };
 
+/**
+ * Motion layer. Every rule below animates transform, opacity or stroke-dashoffset only,
+ * so the palette GitSkins renders stays untouched.
+ *
+ * The `.aura-*` rules restate the card's own entrance animation because a bare
+ * `animation:` shorthand on an equally specific selector would cancel it.
+ */
+function motionStyles(prefix) {
+  return `
+    @media (prefers-reduced-motion: no-preference) {
+      #${prefix} .nx-rise { animation: nx-rise 1s cubic-bezier(0.16,1,0.3,1) both; }
+      #${prefix} .nx-rise-late { animation-delay: 160ms; }
+      #${prefix} .nx-pop { animation: nx-pop 900ms cubic-bezier(0.34,1.56,0.64,1) both 320ms; transform-box: fill-box; transform-origin: center bottom; }
+      #${prefix} .nx-halo { animation: nx-halo 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .nx-orbit { animation: nx-orbit 32s linear infinite; transform-box: view-box; transform-origin: 735px 88px; }
+      #${prefix} .nx-sweep { animation: nx-sweep 4.2s cubic-bezier(0.45,0,0.55,1) infinite 900ms; }
+      #${prefix} .aura-chip.nx-float { animation: ${prefix}-chip 650ms ease-out both, nx-float 7s ease-in-out infinite 1s; }
+      #${prefix} .aura-bar.nx-glow { animation: ${prefix}-bar 1.15s ease-out both, nx-glow 3.4s ease-in-out infinite 1.3s; }
+      @keyframes nx-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes nx-pop { 0% { opacity: 0; transform: scale(0.6); } 60% { opacity: 1; transform: scale(1.08); } 100% { opacity: 1; transform: scale(1); } }
+      @keyframes nx-halo { 0%,100% { transform: scale(1); opacity: 0.92; } 50% { transform: scale(1.045); opacity: 0.62; } }
+      @keyframes nx-orbit { to { transform: rotate(360deg); } }
+      @keyframes nx-sweep { 0% { stroke-dashoffset: 340; } 55%,100% { stroke-dashoffset: -260; } }
+      @keyframes nx-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3.5px); } }
+      @keyframes nx-glow { 0%,100% { opacity: 0.95; } 50% { opacity: 0.62; } }
+    }
+`;
+}
+
+const FLOAT_CHIPS = (svg) => svg.replace(/<g class="aura-chip"/g, '<g class="aura-chip nx-float"');
+const GLOW_BARS = (svg) => svg.replace(/class="aura-bar"/g, 'class="aura-bar nx-glow"');
+
+const ANIMATE = {
+  hero: (svg) => svg
+    .replace('<circle cx="96" cy="88" r="48"', '<circle class="nx-halo" cx="96" cy="88" r="48"')
+    .replace('<circle class="aura-ring" cx="735" cy="88" r="86"', '<circle class="aura-ring nx-orbit" stroke-dasharray="7 11" cx="735" cy="88" r="86"')
+    .replace('<path d="M166 70 C246 44 330 44 410 71"', '<path class="nx-sweep" stroke-dasharray="80 260" d="M166 70 C246 44 330 44 410 71"')
+    .replace('<text x="166" y="63"', '<text class="nx-rise" x="166" y="63"')
+    .replace('<text x="166" y="116"', '<text class="nx-rise nx-rise-late" x="166" y="116"')
+    .replace('<text x="735" y="82"', '<text class="nx-pop" x="735" y="82"'),
+
+  stats: (svg) => GLOW_BARS(FLOAT_CHIPS(svg))
+    .replace(/<text x="(\d+)" y="162"/g, '<text class="nx-pop" x="$1" y="162"'),
+
+  stack: (svg) => GLOW_BARS(FLOAT_CHIPS(svg))
+    .replace(/<circle cx="54" cy="(\d+)" r="5"/g, '<circle class="nx-halo" cx="54" cy="$1" r="5"'),
+};
+
+function addMotion(svg, section) {
+  const enhance = ANIMATE[section];
+  if (!enhance) return svg;
+
+  const prefix = svg.match(/<g id="(gs-[^"]+)"/)?.[1];
+  if (!prefix) throw new Error('could not find the card id needed to scope the motion styles');
+
+  return enhance(svg).replace('  </style>', `${motionStyles(prefix)}  </style>`);
+}
+
 async function refresh(section, light) {
   const name = `${section}${light ? '-light' : ''}.svg`;
   let svg = removeBranding(await download(section, light));
   const customize = CUSTOMIZE[section];
   if (customize) svg = customize(svg);
+  svg = addMotion(svg, section);
 
   if (/gitskins/i.test(svg)) throw new Error(`${name}: branding survived the cleanup`);
   if (section === 'hero' && /<g class="aura-chip"/.test(svg)) throw new Error(`${name}: language chips survived the cleanup`);
+  if (ANIMATE[section] && !svg.includes('@keyframes nx-')) throw new Error(`${name}: motion layer was not applied`);
 
   await writeFile(`${OUT_DIR}/${name}`, svg);
   console.log('updated', name);
