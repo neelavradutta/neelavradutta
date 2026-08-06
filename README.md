@@ -28,3 +28,10 @@
   <picture><source media="(prefers-color-scheme: light)" srcset="assets/social-light.svg" /><img src="assets/social.svg" alt="neelavradutta social links" width="860" /></picture>
 </p>
 
+<p align="center">
+  <a href="https://github.com/neelavradutta">GitHub</a> ·
+  <a href="https://instagram.com/neelavradutta">Instagram</a> ·
+  <a href="https://facebook.com/neelavradutta">Facebook</a> ·
+  <a href="https://x.com/neelavradutta">Twitter</a>
+</p>
+
