@@ -37,7 +37,9 @@ function removeBranding(svg) {
   return svg
     .replace(/[ \t]*<text[^>]*>gitskins\.com<\/text>\r?\n?/gi, '')
     .replace(/Live GitHub stats styled by GitSkins/g, 'Live GitHub stats')
-    .replace(/aria-label="GitSkins gs-([a-z]+)-[^"]*section"/g, (_m, name) => `aria-label="${name} section"`);
+    .replace(/aria-label="GitSkins gs-([a-z]+)-[^"]*section"/g, (_m, name) => `aria-label="${name} section"`)
+    // The small pulsing dot GitSkins parks on the decorative rings.
+    .replace(/[ \t]*<g transform="rotate\([^"]*\)">\s*<circle [^>]*r="4"[^>]*>\s*<animateTransform[\s\S]*?<\/g>\r?\n?/g, '');
 }
 
 /** Drops the bio line and language chips, then closes the gap they leave behind. */

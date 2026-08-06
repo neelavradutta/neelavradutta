@@ -109,11 +109,6 @@
     <circle class="aura-ring" cx="735" cy="88" r="30.959999999999997" fill="none" stroke="#0f172a" stroke-opacity="0.36"/>
     <circle class="aura-ring-b nx-spin-rev" stroke-dasharray="1 9" cx="735" cy="88" r="53.32" fill="none" stroke="#0f172a" stroke-opacity="0.22"/>
     <circle class="aura-ring nx-spin" stroke-dasharray="7 11" cx="735" cy="88" r="86" fill="none" stroke="#0f172a" stroke-opacity="0.14"/>
-    <g transform="rotate(-32 735 88)">
-      <circle cx="788.32" cy="88" r="4" fill="#0069e0">
-        <animateTransform attributeName="transform" type="scale" values="0.85;1.2;0.85" dur="1.6s" repeatCount="indefinite"/>
-      </circle>
-    </g>
     <rect x="26" y="26" width="808" height="124" rx="20" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
     <text class="nx-num" style="animation-delay:800ms" x="735" y="82" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="34" font-weight="900" letter-spacing="-1" fill="#1a85ff">2</text>
     <text class="nx-fade" style="animation-delay:950ms" x="735" y="104" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="10" font-weight="800" letter-spacing="2.6" fill="#475569">TOTAL STARS</text>

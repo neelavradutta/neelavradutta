@@ -62,11 +62,6 @@
     <circle class="ring" cx="752" cy="120" r="25.2" fill="none" stroke="#1f2328" stroke-opacity="0.36"/>
     <circle class="ring-b" cx="752" cy="120" r="43.4" fill="none" stroke="#1f2328" stroke-opacity="0.22"/>
     <circle class="ring" cx="752" cy="120" r="70" fill="none" stroke="#1f2328" stroke-opacity="0.14"/>
-    <g transform="rotate(-32 752 120)">
-      <circle cx="795.4" cy="120" r="4" fill="#0969da">
-        <animateTransform attributeName="transform" type="scale" values="0.85;1.2;0.85" dur="1.6s" repeatCount="indefinite"/>
-      </circle>
-    </g>
     <rect x="26" y="24" width="808" height="192" rx="20" fill="rgba(255,255,255,0.62)" stroke="#0969da" stroke-opacity="0.4"/>
     <path class="sweep" d="M46 70 H 118" fill="none" stroke="#0969da" stroke-opacity="0.5" stroke-width="2" stroke-linecap="round" stroke-dasharray="72" stroke-dashoffset="72"/>
     <text class="label" x="48" y="60" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="11" font-weight="800" letter-spacing="4" fill="#57606a">ABOUT</text>
