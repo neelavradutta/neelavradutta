@@ -114,15 +114,15 @@
     <g class="aura-chip" style="animation-delay:0ms">
       <circle class="nx-dot" style="animation-delay:250ms" cx="54" cy="107" r="5" fill="#3B9EFF"/>
       <text x="72" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#e6edf3">TypeScript</text>
-      <text class="nx-fade" style="animation-delay:650ms" x="306" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#3B9EFF" text-anchor="end">62%</text>
+      <text class="nx-fade" style="animation-delay:650ms" x="306" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#3B9EFF" text-anchor="end">63%</text>
       <rect x="330" y="98" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
-      <rect class="aura-bar" style="animation-delay:400ms" x="330" y="98" width="289" height="9" rx="4.5" fill="#3B9EFF" opacity="0.95"/>
+      <rect class="aura-bar" style="animation-delay:400ms" x="330" y="98" width="294" height="9" rx="4.5" fill="#3B9EFF" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:95ms">
       <circle class="nx-dot" style="animation-delay:345ms" cx="54" cy="139" r="5" fill="#FF4D9A"/>
       <text x="72" y="144" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#e6edf3">Python</text>
-      <text class="nx-fade" style="animation-delay:745ms" x="306" y="144" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FF4D9A" text-anchor="end">14%</text>
+      <text class="nx-fade" style="animation-delay:745ms" x="306" y="144" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FF4D9A" text-anchor="end">13%</text>
       <rect x="330" y="130" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
-      <rect class="aura-bar" style="animation-delay:495ms" x="330" y="130" width="65" height="9" rx="4.5" fill="#FF4D9A" opacity="0.95"/>
+      <rect class="aura-bar" style="animation-delay:495ms" x="330" y="130" width="61" height="9" rx="4.5" fill="#FF4D9A" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:190ms">
       <circle class="nx-dot" style="animation-delay:440ms" cx="54" cy="171" r="5" fill="#FFD60A"/>
       <text x="72" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#e6edf3">CSS</text>
