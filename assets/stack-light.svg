@@ -131,13 +131,13 @@
       <rect class="aura-bar" style="animation-delay:590ms" x="330" y="162" width="51" height="9" rx="4.5" fill="#FFD60A" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:285ms">
       <circle class="nx-dot" style="animation-delay:535ms" cx="54" cy="203" r="5" fill="#2EE6A6"/>
-      <text x="72" y="208" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">Kotlin</text>
+      <text x="72" y="208" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">JavaScript</text>
       <text class="nx-fade" style="animation-delay:935ms" x="306" y="208" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#2EE6A6" text-anchor="end">4%</text>
       <rect x="330" y="194" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
       <rect class="aura-bar" style="animation-delay:685ms" x="330" y="194" width="19" height="9" rx="4.5" fill="#2EE6A6" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:380ms">
       <circle class="nx-dot" style="animation-delay:630ms" cx="54" cy="235" r="5" fill="#FF6B35"/>
-      <text x="72" y="240" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">JavaScript</text>
+      <text x="72" y="240" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">Kotlin</text>
       <text class="nx-fade" style="animation-delay:1030ms" x="306" y="240" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FF6B35" text-anchor="end">4%</text>
       <rect x="330" y="226" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
       <rect class="aura-bar" style="animation-delay:780ms" x="330" y="226" width="19" height="9" rx="4.5" fill="#FF6B35" opacity="0.95"/>
