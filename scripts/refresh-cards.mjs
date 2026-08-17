@@ -136,8 +136,8 @@ function stylizeHeatmap(svg) {
   const glass = light ? '#ffffff' : '#0d1117';
 
   svg = svg
-    .replace(/aria-label="heatmap section"/, 'aria-label="Launch Log — contribution activity"')
-    .replace(/>Contribution Activity</, '>Launch Log<')
+    .replace(/aria-label="(?:heatmap section|Launch Log — contribution activity)"/, 'aria-label="Contribution Activity"')
+    .replace(/>Launch Log</, '>Contribution Activity<')
     .replace(
       />(\d+) contributions in the last year</,
       '>Every commit a launch · $1 in the last year<',
@@ -457,7 +457,7 @@ async function refresh(section, light, profile = {}) {
   if (/gitskins/i.test(svg)) throw new Error(`${name}: branding survived the cleanup`);
   if (section === 'hero' && /<g class="aura-chip"/.test(svg)) throw new Error(`${name}: language chips survived the cleanup`);
   if (ANIMATE[section] && !svg.includes('@keyframes nx-')) throw new Error(`${name}: motion layer was not applied`);
-  if (section === 'heatmap' && !svg.includes('Launch Log')) throw new Error(`${name}: launch log copy was not applied`);
+  if (section === 'heatmap' && !svg.includes('Contribution Activity')) throw new Error(`${name}: contribution title was not applied`);
   if (section === 'heatmap' && !svg.includes(`-rkt"`)) throw new Error(`${name}: rocket layer was not applied`);
 
   await writeFile(`${OUT_DIR}/${name}`, svg);
@@ -823,7 +823,7 @@ if (process.argv.includes('--local-heatmap')) {
     let svg = await readFile(path, 'utf8');
     svg = CUSTOMIZE.heatmap(svg);
     svg = addMotion(svg, 'heatmap');
-    if (!svg.includes('Launch Log')) throw new Error(`${name}: launch log copy was not applied`);
+    if (!svg.includes('Contribution Activity')) throw new Error(`${name}: contribution title was not applied`);
     if (!svg.includes('-rkt"')) throw new Error(`${name}: rocket layer was not applied`);
     await writeFile(path, svg);
     console.log('restyled', name);

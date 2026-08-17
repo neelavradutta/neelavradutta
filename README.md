@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="assets/heatmap-light.svg" /><img src="assets/heatmap.svg" alt="Launch Log — contribution activity" width="860" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/heatmap-light.svg" /><img src="assets/heatmap.svg" alt="Contribution Activity" width="860" /></picture>
 </p>
 
 
