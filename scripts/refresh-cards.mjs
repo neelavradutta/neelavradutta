@@ -110,12 +110,128 @@ function injectHeroLocation(svg, location, light) {
 /** Match section titles to Contribution Activity (24px / weight 850 / -0.4 tracking). */
 function matchSectionTitle(svg) {
   return svg.replace(
-    /(<text[^>]*>)(?:Language Stack|GitHub Stats|Profile Signal|Contribution Activity)(<\/text>)/g,
+    /(<text[^>]*>)(?:Language Stack|GitHub Stats|Profile Signal|Contribution Activity|Launch Log)(<\/text>)/g,
     (full, _open, _close) => full
       .replace(/font-size="\d+"/, 'font-size="24"')
       .replace(/letter-spacing="[^"]*"/, 'letter-spacing="-0.4"')
       .replace(/>Profile Signal</, '>GitHub Stats<'),
   );
+}
+
+/**
+ * Contribution grid → rocket launch log.
+ * GitHub README SVGs cannot run JS, so the "game" is a SMIL flyby:
+ * a craft sweeps the year, each active day lifts as a rocket, then the map holds.
+ */
+function stylizeHeatmap(svg) {
+  const prefix = svg.match(/<g id="(gs-[^"]+)"/)?.[1];
+  if (!prefix) return svg;
+
+  const light = /github-dark-light/.test(svg);
+  const ink = light ? '#0f172a' : '#e6edf3';
+  const accent = light ? '#1a85ff' : '#58a6ff';
+  const canopy = light ? '#0069e0' : '#58a6ff';
+  const flame = light ? '#ff6b35' : '#ffb020';
+  const flameHot = light ? '#ffd60a' : '#fff6d0';
+  const glass = light ? '#ffffff' : '#0d1117';
+
+  svg = svg
+    .replace(/aria-label="heatmap section"/, 'aria-label="Launch Log — contribution activity"')
+    .replace(/>Contribution Activity</, '>Launch Log<')
+    .replace(
+      />(\d+) contributions in the last year</,
+      '>Every commit a launch · $1 in the last year<',
+    )
+    .replace(/>Less</, '>Quiet<')
+    .replace(/>More</, '>Ignition<');
+
+  if (svg.includes(`id="${prefix}-rkt"`)) return svg;
+
+  const defs = `
+    <symbol id="${prefix}-rkt" overflow="visible">
+      <path d="M-2.7 1.15L-4.4 4.6L-2.55 3.25Z"/>
+      <path d="M2.7 1.15L4.4 4.6L2.55 3.25Z"/>
+      <path d="M0-5.35C1.65-5.35 2.8-3.55 2.8-2.05V3.05c0 .88-.72 1.55-1.55 1.55h-2.5c-.83 0-1.55-.67-1.55-1.55V-2.05C-2.8-3.55-1.65-5.35 0-5.35Z"/>
+      <circle cy="-1.15" r="0.82" fill="${glass}" fill-opacity="0.5"/>
+    </symbol>
+    <symbol id="${prefix}-flm" overflow="visible">
+      <path d="M-1.25 4.45L0 8.05 1.25 4.45Z" fill="${flame}"/>
+      <path d="M-0.62 4.45L0 6.55 .62 4.45Z" fill="${flameHot}"/>
+    </symbol>
+`;
+
+  svg = svg.replace('</defs>', `${defs}  </defs>`);
+
+  const legendRockets = [0.07, 0.34, 0.55, 0.78, 1]
+    .map((op, i) => {
+      const x = 661.5 + i * 15;
+      const fill = i === 0 ? ink : accent;
+      const flm = i === 0
+        ? ''
+        : `<use class="nx-flm" href="#${prefix}-flm" xlink:href="#${prefix}-flm" opacity="${(0.35 + op * 0.5).toFixed(2)}"/>`;
+      return `<g transform="translate(${x},68.5)"><use href="#${prefix}-rkt" xlink:href="#${prefix}-rkt" fill="${fill}" fill-opacity="${op}"/>${flm}</g>`;
+    })
+    .join('');
+
+  svg = svg.replace(
+    /(?:<rect x="(?:656|671|686|701|716)" y="63"[^/]*\/>){5}/,
+    legendRockets,
+  );
+
+  const spline = 'calcMode="spline" keySplines="0.16 1 0.3 1;0.34 1 0.64 1"';
+  let cells = 0;
+  svg = svg.replace(
+    /<g transform="translate\(([\d.]+),([\d.]+)\)">\s*<rect([^>]*)>([\s\S]*?)<\/rect>\s*<\/g>/g,
+    (_m, x, y, attrs, inner) => {
+      cells += 1;
+      const fill = attrs.match(/fill="([^"]+)"/)?.[1] || accent;
+      const values = inner.match(/attributeName="fill-opacity" values="([^"]+)"/)?.[1] || '0;0.07;0.07';
+      const parts = values.split(';').map(Number);
+      const finalOp = parts[2] ?? parts[1] ?? 0.07;
+      const peak = parts[1] ?? finalOp;
+      const begin = inner.match(/\bbegin="([^"]+)"/)?.[1] || '0.2s';
+      const dur = inner.match(/\bdur="([^"]+)"/)?.[1] || '0.6s';
+      const active = finalOp > 0.12;
+      const hop = finalOp >= 0.95 ? 16 : finalOp >= 0.7 ? 13 : finalOp >= 0.5 ? 10 : 7;
+      const beginSec = Number.parseFloat(begin) || 0.2;
+      const liveAt = `${(beginSec + 0.95).toFixed(3)}s`;
+      const live = finalOp >= 0.95
+        ? { hi: 1, lo: 0.72, dur: 1.9, ember: 0.9, cls: 'nx-live-4' }
+        : finalOp >= 0.7
+          ? { hi: 1, lo: Math.max(0.55, finalOp - 0.12), dur: 2.4, ember: 0.68, cls: 'nx-live-3' }
+          : finalOp >= 0.5
+            ? { hi: Math.min(1, finalOp + 0.22), lo: finalOp, dur: 3.0, ember: 0.48, cls: 'nx-live-2' }
+            : { hi: Math.min(1, finalOp + 0.18), lo: finalOp, dur: 3.6, ember: 0.32, cls: 'nx-live-1' };
+      const pad = active
+        ? `<rect class="${live.cls}" x="-5.5" y="-5.5" width="11" height="11" rx="2.5" fill="${fill}" fill-opacity="0" transform="scale(0.15)"><animate attributeName="fill-opacity" values="0;0;${peak};${finalOp}" keyTimes="0;0.58;0.82;1" begin="${begin}" dur="0.95s" fill="freeze"/><animate attributeName="fill-opacity" values="${live.lo};${live.hi};${live.lo}" begin="${liveAt}" dur="${live.dur}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" values="0.15;0.15;1.14;1" keyTimes="0;0.58;0.82;1" begin="${begin}" dur="0.95s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.16 1 0.3 1;0.34 1 0.64 1"/></rect>`
+        : `<rect x="-5.5" y="-5.5" width="11" height="11" rx="2.5" fill="${fill}" fill-opacity="0" transform="scale(0.15)"><animate attributeName="fill-opacity" values="0;${finalOp};${finalOp}" keyTimes="0;0.55;1" begin="${begin}" dur="${dur}" fill="freeze"/><animateTransform attributeName="transform" type="scale" values="0.15;1.08;1" keyTimes="0;0.55;1" begin="${begin}" dur="${dur}" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1;0.4 0 0.2 1"/></rect>`;
+      if (!active) return `<g transform="translate(${x},${y})">${pad}</g>`;
+      const ember = `<g transform="scale(0.78)"><use class="nx-flm" href="#${prefix}-flm" xlink:href="#${prefix}-flm" opacity="0"><animate attributeName="opacity" values="${(live.ember * 0.4).toFixed(2)};${live.ember};${(live.ember * 0.35).toFixed(2)};${(live.ember * 0.4).toFixed(2)}" begin="${liveAt}" dur="${(live.dur * 0.72).toFixed(2)}s" repeatCount="indefinite"/></use></g>`;
+      return `<g transform="translate(${x},${y})">${pad}<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.66;1" begin="${begin}" dur="0.9s" fill="freeze"/><animateTransform attributeName="transform" type="translate" values="0 18; 0 -${hop}; 0 0" keyTimes="0;0.58;1" begin="${begin}" dur="0.9s" fill="freeze" ${spline}/><use href="#${prefix}-rkt" xlink:href="#${prefix}-rkt" fill="${fill}"/><use class="nx-flm" href="#${prefix}-flm" xlink:href="#${prefix}-flm"/></g>${ember}</g>`;
+    },
+  );
+  if (cells < 50) throw new Error('heatmap: rocket pass found too few cells');
+
+  const craft = `
+    <g class="nx-craft" opacity="0">
+      <animateTransform id="${prefix}-pass" attributeName="transform" type="translate" values="40 193; 790 193" begin="0.2s; ${prefix}-pass.end+4.8s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.88;1" begin="0.2s; ${prefix}-pass.end+4.8s" dur="2.2s"/>
+      <rect x="0" y="-95" width="2" height="86" fill="${accent}" opacity="0.32"/>
+      <ellipse class="nx-hero-flame" cx="-7" cy="0" rx="9" ry="3.1" fill="${flame}" opacity="0.8"/>
+      <ellipse class="nx-hero-flame" cx="-3" cy="0" rx="4.2" ry="1.6" fill="${flameHot}"/>
+      <path d="M1 2.8 L7.5 2.8 L-1 9.2 L-5 9.2Z" fill="${accent}"/>
+      <path d="M1 -2.8 L7.5 -2.8 L-1 -9.2 L-5 -9.2Z" fill="${accent}"/>
+      <path d="M-5 -4.2 L15 -4.2 C22.5 -4.2 26.5 -2 28.5 0 C26.5 2 22.5 4.2 15 4.2 L-5 4.2 C-7.8 4.2 -8.8 2.3 -8.8 0 C-8.8 -2.3 -7.8 -4.2 -5 -4.2Z" fill="${ink}"/>
+      <circle cx="17.5" cy="0" r="2.05" fill="${canopy}"/>
+      <rect x="0" y="-0.9" width="11" height="1.8" rx="0.9" fill="${accent}"/>
+    </g>`;
+
+  svg = svg.replace(
+    /<rect x="46" y="98" width="2.5" height="99"[\s\S]*?<\/rect>/,
+    craft,
+  );
+
+  return svg;
 }
 
 /** Tweaks label + figure sizes inside each stat box. */
@@ -223,7 +339,7 @@ const CUSTOMIZE = {
   hero: (svg) => roundCorners(trimHero(svg)),
   stats: (svg) => roundCorners(tightenStats(alignStatBoxes(shrinkStats(svg)))),
   stack: (svg) => roundCorners(brightenStackColors(trimStack(svg))),
-  heatmap: (svg) => roundCorners(matchSectionTitle(svg)),
+  heatmap: (svg) => roundCorners(stylizeHeatmap(matchSectionTitle(svg))),
 };
 
 /**
@@ -257,6 +373,12 @@ function motionStyles(prefix) {
       #${prefix} g.aura-chip:hover { filter: brightness(1.1) drop-shadow(0 10px 16px rgba(88,166,255,0.28)); }
       #${prefix} .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both; transition: filter 220ms ease; }
       #${prefix} g.aura-chip:hover .aura-bar { filter: brightness(1.2); }
+      #${prefix} .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }
+      #${prefix} .nx-hero-flame { animation: nx-hero-flame 180ms ease-in-out infinite; transform-box: fill-box; transform-origin: right center; }
+      #${prefix} .nx-live-1 { animation: nx-glow 3.6s ease-in-out 3.2s infinite; }
+      #${prefix} .nx-live-2 { animation: nx-glow 3s ease-in-out 3.1s infinite; }
+      #${prefix} .nx-live-3 { animation: nx-glow 2.4s ease-in-out 3s infinite; }
+      #${prefix} .nx-live-4 { animation: nx-glow 1.9s ease-in-out 2.9s infinite; }
       @keyframes nx-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
       @keyframes nx-fade { from { opacity: 0; } to { opacity: 1; } }
       @keyframes nx-scale-in { from { opacity: 0; transform: scale(0.88); } to { opacity: 1; transform: scale(1); } }
@@ -267,6 +389,9 @@ function motionStyles(prefix) {
       @keyframes nx-spin-rev { to { transform: rotate(-360deg); } }
       @keyframes nx-card { from { opacity: 0; transform: translateY(20px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
       @keyframes nx-bar { 0% { transform: scaleX(0); } 75% { transform: scaleX(1.03); } 100% { transform: scaleX(1); } }
+      @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }
+      @keyframes nx-hero-flame { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(1.22); } }
+      @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }
     }
 `;
 }
@@ -305,6 +430,10 @@ const ANIMATE = {
     svg = staggered(svg, /class="aura-bar"/g, (_m, style) => `class="aura-bar" ${style}`, 400, 95);
     return svg;
   },
+
+  heatmap: (svg) => svg
+    .replace('<text x="46" y="60"', '<text class="nx-in" x="46" y="60"')
+    .replace('<text x="48" y="84"', '<text class="nx-in nx-in-2" x="48" y="84"'),
 };
 
 function addMotion(svg, section) {
@@ -328,6 +457,8 @@ async function refresh(section, light, profile = {}) {
   if (/gitskins/i.test(svg)) throw new Error(`${name}: branding survived the cleanup`);
   if (section === 'hero' && /<g class="aura-chip"/.test(svg)) throw new Error(`${name}: language chips survived the cleanup`);
   if (ANIMATE[section] && !svg.includes('@keyframes nx-')) throw new Error(`${name}: motion layer was not applied`);
+  if (section === 'heatmap' && !svg.includes('Launch Log')) throw new Error(`${name}: launch log copy was not applied`);
+  if (section === 'heatmap' && !svg.includes(`-rkt"`)) throw new Error(`${name}: rocket layer was not applied`);
 
   await writeFile(`${OUT_DIR}/${name}`, svg);
   console.log('updated', name);
@@ -685,6 +816,20 @@ async function refreshConnect() {
 }
 
 await mkdir(OUT_DIR, { recursive: true });
+
+if (process.argv.includes('--local-heatmap')) {
+  for (const name of ['heatmap.svg', 'heatmap-light.svg']) {
+    const path = `${OUT_DIR}/${name}`;
+    let svg = await readFile(path, 'utf8');
+    svg = CUSTOMIZE.heatmap(svg);
+    svg = addMotion(svg, 'heatmap');
+    if (!svg.includes('Launch Log')) throw new Error(`${name}: launch log copy was not applied`);
+    if (!svg.includes('-rkt"')) throw new Error(`${name}: rocket layer was not applied`);
+    await writeFile(path, svg);
+    console.log('restyled', name);
+  }
+  process.exit(0);
+}
 
 const failures = [];
 let profile = { bio: '', location: '', name: USERNAME };
