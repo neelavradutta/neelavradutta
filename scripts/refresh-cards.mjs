@@ -196,26 +196,25 @@ function stylizeHeatmap(svg) {
       const beginSec = Number.parseFloat(begin) || 0.2;
       const liveAt = `${(beginSec + 0.95).toFixed(3)}s`;
       const live = finalOp >= 0.95
-        ? { hi: 1, lo: 0.72, dur: 1.9, ember: 0.9, cls: 'nx-live-4' }
+        ? { hi: 1, lo: 0.72, dur: 1.9, cls: 'nx-live-4' }
         : finalOp >= 0.7
-          ? { hi: 1, lo: Math.max(0.55, finalOp - 0.12), dur: 2.4, ember: 0.68, cls: 'nx-live-3' }
+          ? { hi: 1, lo: Math.max(0.55, finalOp - 0.12), dur: 2.4, cls: 'nx-live-3' }
           : finalOp >= 0.5
-            ? { hi: Math.min(1, finalOp + 0.22), lo: finalOp, dur: 3.0, ember: 0.48, cls: 'nx-live-2' }
-            : { hi: Math.min(1, finalOp + 0.18), lo: finalOp, dur: 3.6, ember: 0.32, cls: 'nx-live-1' };
+            ? { hi: Math.min(1, finalOp + 0.22), lo: finalOp, dur: 3.0, cls: 'nx-live-2' }
+            : { hi: Math.min(1, finalOp + 0.18), lo: finalOp, dur: 3.6, cls: 'nx-live-1' };
       const pad = active
         ? `<rect class="${live.cls}" x="-5.5" y="-5.5" width="11" height="11" rx="2.5" fill="${fill}" fill-opacity="0" transform="scale(0.15)"><animate attributeName="fill-opacity" values="0;0;${peak};${finalOp}" keyTimes="0;0.58;0.82;1" begin="${begin}" dur="0.95s" fill="freeze"/><animate attributeName="fill-opacity" values="${live.lo};${live.hi};${live.lo}" begin="${liveAt}" dur="${live.dur}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="scale" values="0.15;0.15;1.14;1" keyTimes="0;0.58;0.82;1" begin="${begin}" dur="0.95s" fill="freeze" calcMode="spline" keySplines="0 0 1 1;0.16 1 0.3 1;0.34 1 0.64 1"/></rect>`
         : `<rect x="-5.5" y="-5.5" width="11" height="11" rx="2.5" fill="${fill}" fill-opacity="0" transform="scale(0.15)"><animate attributeName="fill-opacity" values="0;${finalOp};${finalOp}" keyTimes="0;0.55;1" begin="${begin}" dur="${dur}" fill="freeze"/><animateTransform attributeName="transform" type="scale" values="0.15;1.08;1" keyTimes="0;0.55;1" begin="${begin}" dur="${dur}" fill="freeze" calcMode="spline" keySplines="0.2 0.8 0.2 1;0.4 0 0.2 1"/></rect>`;
       if (!active) return `<g transform="translate(${x},${y})">${pad}</g>`;
-      const ember = `<g transform="scale(0.78)"><use class="nx-flm" href="#${prefix}-flm" xlink:href="#${prefix}-flm" opacity="0"><animate attributeName="opacity" values="${(live.ember * 0.4).toFixed(2)};${live.ember};${(live.ember * 0.35).toFixed(2)};${(live.ember * 0.4).toFixed(2)}" begin="${liveAt}" dur="${(live.dur * 0.72).toFixed(2)}s" repeatCount="indefinite"/></use></g>`;
-      return `<g transform="translate(${x},${y})">${pad}<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.66;1" begin="${begin}" dur="0.9s" fill="freeze"/><animateTransform attributeName="transform" type="translate" values="0 18; 0 -${hop}; 0 0" keyTimes="0;0.58;1" begin="${begin}" dur="0.9s" fill="freeze" ${spline}/><use href="#${prefix}-rkt" xlink:href="#${prefix}-rkt" fill="${fill}"/><use class="nx-flm" href="#${prefix}-flm" xlink:href="#${prefix}-flm"/></g>${ember}</g>`;
+      return `<g transform="translate(${x},${y})">${pad}<g opacity="0"><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.12;0.66;1" begin="${begin}" dur="0.9s" fill="freeze"/><animateTransform attributeName="transform" type="translate" values="0 18; 0 -${hop}; 0 0" keyTimes="0;0.58;1" begin="${begin}" dur="0.9s" fill="freeze" ${spline}/><use href="#${prefix}-rkt" xlink:href="#${prefix}-rkt" fill="${fill}"/><use class="nx-flm" href="#${prefix}-flm" xlink:href="#${prefix}-flm"/></g></g>`;
     },
   );
   if (cells < 50) throw new Error('heatmap: rocket pass found too few cells');
 
   const craft = `
     <g class="nx-craft" opacity="0">
-      <animateTransform id="${prefix}-pass" attributeName="transform" type="translate" values="40 193; 790 193" begin="0.2s; ${prefix}-pass.end+4.8s" dur="2.2s" fill="freeze"/>
-      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.88;1" begin="0.2s; ${prefix}-pass.end+4.8s" dur="2.2s"/>
+      <animateTransform id="${prefix}-pass" attributeName="transform" type="translate" values="40 193; 790 193" begin="0.2s" dur="2.2s" fill="freeze"/>
+      <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.88;1" begin="0.2s" dur="2.2s" fill="freeze"/>
       <rect x="0" y="-95" width="2" height="86" fill="${accent}" opacity="0.32"/>
       <ellipse class="nx-hero-flame" cx="-7" cy="0" rx="9" ry="3.1" fill="${flame}" opacity="0.8"/>
       <ellipse class="nx-hero-flame" cx="-3" cy="0" rx="4.2" ry="1.6" fill="${flameHot}"/>
