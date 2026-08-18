@@ -269,6 +269,232 @@ function tightenStats(svg) {
     .replace('viewBox="0 0 860 260"', 'viewBox="0 0 860 244"');
 }
 
+const VISITORS_FILE = `${OUT_DIR}/visitors.json`;
+let visitorCount = 0;
+
+function parseStatNumber(raw) {
+  const text = String(raw).trim().replace(/,/g, '');
+  const match = text.match(/^([\d.]+)\s*([kKmM])?$/);
+  if (!match) return Number(text) || 0;
+  const n = Number(match[1]);
+  const unit = (match[2] || '').toLowerCase();
+  if (unit === 'k') return Math.round(n * 1e3);
+  if (unit === 'm') return Math.round(n * 1e6);
+  return n;
+}
+
+function formatStatNumber(n) {
+  const v = Math.max(0, Math.round(Number(n) || 0));
+  if (v >= 1_000_000) return `${(v / 1e6).toFixed(v >= 10_000_000 ? 0 : 1).replace(/\.0$/, '')}M`;
+  if (v >= 10_000) return `${Math.round(v / 1000)}k`;
+  if (v >= 1000) return `${(v / 1000).toFixed(1).replace(/\.0$/, '')}k`;
+  return String(v);
+}
+
+async function loadStoredVisitors() {
+  try {
+    return JSON.parse(await readFile(VISITORS_FILE, 'utf8'));
+  } catch {
+    return { unique: 0, others: 0, byDay: {} };
+  }
+}
+
+/**
+ * Unique visitors excluding the owner (minus one unique for self).
+ * Traffic API = repo uniques, no self-increment. hits.sh = profile README pixel.
+ */
+async function fetchVisitorCount() {
+  const stored = await loadStoredVisitors();
+  let unique = Number(stored.unique) || 0;
+  const byDay = { ...(stored.byDay || {}) };
+
+  try {
+    const response = await fetch(`https://api.github.com/repos/${USERNAME}/${USERNAME}/traffic/views`, {
+      headers: githubHeaders(),
+    });
+    if (response.ok) {
+      const data = await response.json();
+      for (const row of data.views || []) {
+        const day = String(row.timestamp || '').slice(0, 10);
+        if (!day) continue;
+        byDay[day] = Math.max(byDay[day] || 0, Number(row.uniques) || 0);
+      }
+      const trafficSum = Object.values(byDay).reduce((sum, n) => sum + Number(n || 0), 0);
+      unique = Math.max(unique, trafficSum);
+    }
+  } catch {
+    /* traffic needs push access; keep stored */
+  }
+
+  try {
+    const response = await fetch(`https://hits.sh/github.com/${USERNAME}/${USERNAME}.svg?view=unique`);
+    if (response.ok) {
+      const svg = await response.text();
+      const raw = svg.match(/hits:\s*([\d,]+)/i)?.[1] || svg.match(/>([\d,]+)<\/text>\s*<\/g>/)?.[1];
+      const n = Number(String(raw || '').replace(/,/g, ''));
+      if (Number.isFinite(n) && n >= 0) unique = Math.max(unique, n);
+    }
+  } catch {
+    /* optional profile-hit signal */
+  }
+
+  unique = Math.max(unique, Number(stored.unique) || 0);
+  const others = Math.max(0, unique - 1);
+  await writeFile(
+    VISITORS_FILE,
+    `${JSON.stringify({ unique, others, byDay, updated: new Date().toISOString() }, null, 2)}\n`,
+  );
+  console.log('visitors excluding owner:', others);
+  return others;
+}
+
+function visitorPixelBlock() {
+  const src = `https://hits.sh/github.com/${USERNAME}/${USERNAME}.svg?view=unique`;
+  return `<p align="center">\n  <img src="${src}" width="1" height="1" alt="" />\n</p>\n`;
+}
+
+const VISITOR_PIXEL_RE =
+  /<p align="center">\s*<img src="https:\/\/hits\.sh\/github\.com\/[^"]+"[^>]*>\s*<\/p>\s*/;
+
+async function ensureVisitorPixel() {
+  let readme = await readFile('README.md', 'utf8');
+  const pixel = visitorPixelBlock();
+  if (VISITOR_PIXEL_RE.test(readme)) {
+    readme = readme.replace(VISITOR_PIXEL_RE, pixel);
+  } else if (readme.includes('assets/stats.svg')) {
+    readme = readme.replace(
+      /(<picture>(?:(?!<\/picture>)[\s\S])*assets\/stats\.svg(?:(?!<\/picture>)[\s\S])*<\/picture>\s*\r?\n<\/p>)/,
+      `$1\n${pixel}`,
+    );
+  } else {
+    return;
+  }
+  await writeFile('README.md', readme);
+  console.log('updated README.md visitor pixel');
+}
+
+/**
+ * Whitish matched boxes, Stars → Visitors (excluding owner), bars scaled to the set.
+ */
+function revampStats(svg, visitors) {
+  const boxFill = '#ffffff';
+  const boxStroke = '#d7dee8';
+  const ink = '#0f172a';
+  const mute = '#475569';
+
+  svg = svg
+    .replace(/[ \t]*<circle class="aura-ring[^"]*"[^>]*cx="735"[^/]*\/>\r?\n?/g, '')
+    .replace(/>Stars</g, '>Visitors<')
+    .replace(
+      /<rect x="28" y="26" width="804" height="190" rx="28" fill="[^"]+" stroke="[^"]+" stroke-opacity="[^"]+"/,
+      `<rect x="28" y="26" width="804" height="190" rx="28" fill="${boxFill}" stroke="${boxStroke}" stroke-opacity="0.55"`,
+    )
+    .replace(
+      /<rect x="(\d+)" y="76" width="180" height="122" rx="24" fill="[^"]+" stroke="[^"]+" stroke-opacity="[^"]+"/g,
+      `<rect x="$1" y="76" width="180" height="122" rx="24" fill="${boxFill}" stroke="${boxStroke}" stroke-opacity="0.55"`,
+    )
+    .replace(
+      /<rect width="860" height="244" rx="32" fill="url\([^"]+\)"/,
+      '<rect width="860" height="244" rx="32" fill="#f6f8fc"',
+    )
+    .replace(
+      /<rect x="0.5" y="0.5" width="859" height="243" rx="31.5" fill="none" stroke="[^"]+" stroke-opacity="[^"]+"/,
+      `<rect x="0.5" y="0.5" width="859" height="243" rx="31.5" fill="none" stroke="${boxStroke}" stroke-opacity="0.62"`,
+    )
+    .replace(/fill="rgba\(255,255,255,0\.1\)"/g, 'fill="rgba(15,23,42,0.08)"')
+    .replace(/<text([^>]*x="46" y="61"[^>]*)fill="#(?:e6edf3|0f172a)"/, `<text$1fill="${ink}"`)
+    .replace(/<text([^>]*x="48" y="84"[^>]*)fill="#(?:8b949e|475569)"/, `<text$1fill="${mute}"`)
+    .replace(/fill="#8b949e"/g, `fill="${mute}"`);
+
+  const visitorLabel = formatStatNumber(visitors);
+  svg = svg.replace(
+    /(<text[^>]*x="68" y="146"[^>]*>)[^<]+(<\/text>)/,
+    `$1${visitorLabel}$2`,
+  );
+
+  const values = [];
+  svg.replace(/<text[^>]*x="(\d+)" y="146"[^>]*>([^<]+)<\/text>/g, (_m, x, raw) => {
+    values.push({ x: Number(x), n: parseStatNumber(raw) });
+    return _m;
+  });
+  const peak = Math.max(1, ...values.map((row) => row.n));
+  let bar = 0;
+  svg = svg.replace(/<rect class="aura-bar"([^>]*)width="\d+"/g, (full, attrs) => {
+    const row = values[bar++];
+    const width = row ? Math.max(11, Math.round(136 * (row.n / peak))) : 11;
+    return `<rect class="aura-bar"${attrs}width="${width}"`;
+  });
+
+  return injectStatsRockets(svg);
+}
+
+/** Horizontal rocket parked at each bar tip. */
+function injectStatsRockets(svg) {
+  const prefix = svg.match(/<g id="(gs-[^"]+)"/)?.[1];
+  if (!prefix) return svg;
+
+  const accent = /github-dark-light/.test(svg) ? '#1a85ff' : '#58a6ff';
+  const flame = '#ff6b35';
+  const flameHot = '#ffd60a';
+  const fills = [accent, '#2ad5ef', '#a371f7', '#43d55c'];
+
+  svg = svg.replace(/<g transform="translate\((?:136|332|528|724),168\)"><g opacity="0">[\s\S]*?<\/g><\/g>/g, '');
+  svg = svg.replace(/<g class="nx-orbit">[\s\S]*?<\/g>\s*<\/g>/g, '');
+  svg = svg.replace(/<g class="nx-orbit">[\s\S]*?<\/g>/g, '');
+  svg = svg.replace(/      #[^\s]+ \.nx-hero-flame \{[^}]+\}\n/, '');
+  svg = svg.replace(/      @keyframes nx-hero-flame \{[^\n]+\n/, '');
+  svg = svg.replace(/<g class="nx-bar-rkt"[^>]*>[\s\S]*?<\/g>\s*<\/g>/g, '');
+  svg = svg.replace(/<g class="nx-bar-rkt"[^>]*>[\s\S]*?<\/g>/g, '');
+
+  if (!svg.includes(`id="${prefix}-srt"`)) {
+    const defs = `
+    <symbol id="${prefix}-srt" overflow="visible">
+      <path d="M-2.1 0.9L-3.4 3.6L-2 2.5Z"/>
+      <path d="M2.1 0.9L3.4 3.6L2 2.5Z"/>
+      <path d="M0-4.2C1.3-4.2 2.2-2.8 2.2-1.6V2.4c0 .7-.55 1.2-1.2 1.2h-2c-.65 0-1.2-.5-1.2-1.2V-1.6C-2.2-2.8-1.3-4.2 0-4.2Z"/>
+    </symbol>
+    <symbol id="${prefix}-sfl" overflow="visible">
+      <path d="M-1 3.5L0 6.4 1 3.5Z" fill="${flame}"/>
+      <path d="M-0.5 3.5L0 5.2 .5 3.5Z" fill="${flameHot}"/>
+    </symbol>
+`;
+    svg = svg.replace('</defs>', `${defs}  </defs>`);
+  }
+
+  const bars = [];
+  svg.replace(/<rect class="aura-bar"[^>]*>/g, (tag) => {
+    const x = Number(tag.match(/\bx="([\d.]+)"/)?.[1]);
+    const y = Number(tag.match(/\by="([\d.]+)"/)?.[1]);
+    const w = Number(tag.match(/\bwidth="([\d.]+)"/)?.[1]);
+    if (Number.isFinite(x) && Number.isFinite(y) && Number.isFinite(w)) bars.push({ x, y, w });
+    return tag;
+  });
+  const rest = bars
+    .map((bar, i) => `<g class="nx-bar-rkt" transform="translate(${bar.x + bar.w},${bar.y + 3.5}) rotate(90)"><use href="#${prefix}-srt" xlink:href="#${prefix}-srt" fill="${fills[i] || accent}"/><use class="nx-flm" href="#${prefix}-sfl" xlink:href="#${prefix}-sfl"/></g>`)
+    .join('');
+  if (rest) {
+    svg = svg.replace(
+      /<rect x="0.5" y="0.5" width="859" height="243"/,
+      `${rest}\n    <rect x="0.5" y="0.5" width="859" height="243"`,
+    );
+  }
+
+  if (!svg.includes('.nx-flm')) {
+    const glow = svg.includes('g.aura-chip > rect:first-of-type')
+      ? ''
+      : `      #${prefix} g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }\n`;
+    const extra = `      #${prefix} .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both, nx-burn 2.4s ease-in-out 1.2s infinite; }\n      #${prefix} .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }\n`;
+    const frames = [
+      svg.includes('@keyframes nx-glow') ? '' : '      @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }\n',
+      svg.includes('@keyframes nx-burn') ? '' : '      @keyframes nx-burn { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.28); } }\n',
+      svg.includes('@keyframes nx-flicker') ? '' : '      @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }\n',
+    ].join('');
+    svg = svg.replace('  </style>', `${glow}${extra}${frames}  </style>`);
+  }
+
+  return svg;
+}
+
 /** Drops the "> stack.scan" terminal flourish and its blinking cursor. */
 function trimStack(svg) {
   return matchSectionTitle(svg)
@@ -336,7 +562,7 @@ function roundCorners(svg) {
 
 const CUSTOMIZE = {
   hero: (svg) => roundCorners(trimHero(svg)),
-  stats: (svg) => roundCorners(tightenStats(alignStatBoxes(shrinkStats(svg)))),
+  stats: (svg) => roundCorners(revampStats(tightenStats(alignStatBoxes(shrinkStats(svg))), visitorCount)),
   stack: (svg) => roundCorners(brightenStackColors(trimStack(svg))),
   heatmap: (svg) => roundCorners(stylizeHeatmap(matchSectionTitle(svg))),
 };
@@ -370,7 +596,8 @@ function motionStyles(prefix) {
       #${prefix} .aura-ring-b.nx-spin-rev { animation: ${prefix}-ring 10s ease-in-out infinite 1.6s, nx-spin-rev 45s linear infinite; transform-box: fill-box; transform-origin: center; }
       #${prefix} g.aura-chip { animation: nx-card 800ms cubic-bezier(0.22,1,0.36,1) both; transition: filter 240ms ease; cursor: pointer; }
       #${prefix} g.aura-chip:hover { filter: brightness(1.1) drop-shadow(0 10px 16px rgba(88,166,255,0.28)); }
-      #${prefix} .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both; transition: filter 220ms ease; }
+      #${prefix} g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }
+      #${prefix} .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both, nx-burn 2.4s ease-in-out 1.2s infinite; transition: filter 220ms ease; }
       #${prefix} g.aura-chip:hover .aura-bar { filter: brightness(1.2); }
       #${prefix} .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }
       #${prefix} .nx-hero-flame { animation: nx-hero-flame 180ms ease-in-out infinite; transform-box: fill-box; transform-origin: right center; }
@@ -391,6 +618,7 @@ function motionStyles(prefix) {
       @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }
       @keyframes nx-hero-flame { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(1.22); } }
       @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }
+      @keyframes nx-burn { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.28); } }
     }
 `;
 }
@@ -415,7 +643,7 @@ const ANIMATE = {
     svg = svg
       .replace('<text x="46" y="61"', '<text class="nx-in" x="46" y="61"')
       .replace('<text x="48" y="84"', '<text class="nx-in nx-in-2" x="48" y="84"');
-    svg = staggered(svg, /<text x="(\d+)" y="162"/g, ([, x], style) => `<text class="nx-num" ${style} x="${x}" y="162"`, 350, 100);
+    svg = staggered(svg, /<text x="(\d+)" y="146"/g, ([, x], style) => `<text class="nx-num" ${style} x="${x}" y="146"`, 350, 100);
     svg = staggered(svg, /class="aura-bar"/g, (_m, style) => `class="aura-bar" ${style}`, 500, 100);
     return svg;
   },
@@ -456,6 +684,7 @@ async function refresh(section, light, profile = {}) {
   if (/gitskins/i.test(svg)) throw new Error(`${name}: branding survived the cleanup`);
   if (section === 'hero' && /<g class="aura-chip"/.test(svg)) throw new Error(`${name}: language chips survived the cleanup`);
   if (ANIMATE[section] && !svg.includes('@keyframes nx-')) throw new Error(`${name}: motion layer was not applied`);
+  if (section === 'stats' && !svg.includes('>Visitors<')) throw new Error(`${name}: visitors stat was not applied`);
   if (section === 'heatmap' && !svg.includes('Contribution Activity')) throw new Error(`${name}: contribution title was not applied`);
   if (section === 'heatmap' && !svg.includes(`-rkt"`)) throw new Error(`${name}: rocket layer was not applied`);
 
@@ -840,6 +1069,46 @@ try {
   console.error('failed', error.message);
 }
 
+try {
+  visitorCount = await fetchVisitorCount();
+} catch (error) {
+  failures.push(error.message);
+  console.error('failed', error.message);
+}
+
+if (process.argv.includes('--local-stats')) {
+  for (const name of ['stats.svg', 'stats-light.svg']) {
+    const path = `${OUT_DIR}/${name}`;
+    let svg = await readFile(path, 'utf8');
+    svg = CUSTOMIZE.stats(svg);
+    if (svg.includes('@keyframes nx-')) {
+      svg = svg.replace(
+        /<text x="(\d+)" y="146" font-family/g,
+        '<text class="nx-num" x="$1" y="146" font-family',
+      );
+      const prefix = svg.match(/<g id="(gs-[^"]+)"/)?.[1];
+      if (prefix && !svg.includes('g.aura-chip > rect:first-of-type')) {
+        const glow = `      #${prefix} g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }\n`;
+        const frames = svg.includes('@keyframes nx-glow')
+          ? ''
+          : `      @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }\n`;
+        svg = svg.replace('  </style>', `${glow}${frames}  </style>`);
+      }
+    } else {
+      svg = addMotion(svg, 'stats');
+    }
+    if (!svg.includes('>Visitors<')) throw new Error(`${name}: visitors stat was not applied`);
+    await writeFile(path, svg);
+    console.log('restyled', name);
+  }
+  try {
+    await ensureVisitorPixel();
+  } catch (error) {
+    console.error('failed', error.message);
+  }
+  process.exit(0);
+}
+
 for (const section of SECTIONS) {
   for (const light of [false, true]) {
     try {
@@ -860,6 +1129,13 @@ try {
 
 try {
   await refreshConnect();
+} catch (error) {
+  failures.push(error.message);
+  console.error('failed', error.message);
+}
+
+try {
+  await ensureVisitorPixel();
 } catch (error) {
   failures.push(error.message);
   console.error('failed', error.message);

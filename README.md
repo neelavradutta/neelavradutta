@@ -17,9 +17,9 @@
 <p align="center">
   <picture><source media="(prefers-color-scheme: light)" srcset="assets/stats-light.svg" /><img src="assets/stats.svg" alt="GitHub Stats" width="860" /></picture>
 </p>
-
-
-
+<p align="center">
+  <img src="https://hits.sh/github.com/neelavradutta/neelavradutta.svg?view=unique" width="1" height="1" alt="" />
+</p>
 <h2 align="center">🤝 Connect With Me</h2>
 
 <p align="center">
