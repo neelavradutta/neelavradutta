@@ -142,19 +142,19 @@
     <g class="aura-chip" style="animation-delay:0ms">
       <rect x="46" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="68" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Visitors</text>
-      <text class="nx-num" style="animation-delay:350ms" x="68" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#1a85ff">23</text>
+      <text class="nx-num" style="animation-delay:350ms" x="68" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#1a85ff">36</text>
       <rect x="68" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
-      <rect class="aura-bar" style="animation-delay:500ms" x="68" y="170" width="11" height="7" rx="3.5" fill="#1a85ff" opacity="0.9"/>
+      <rect class="aura-bar" style="animation-delay:500ms" x="68" y="170" width="14" height="7" rx="3.5" fill="#1a85ff" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:100ms">
       <rect x="242" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="264" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Contributions</text>
-      <text class="nx-num" style="animation-delay:450ms" x="264" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#2ad5ef">314</text>
+      <text class="nx-num" style="animation-delay:450ms" x="264" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#2ad5ef">345</text>
       <rect x="264" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
       <rect class="aura-bar" style="animation-delay:600ms" x="264" y="170" width="136" height="7" rx="3.5" fill="#2ad5ef" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:200ms">
       <rect x="438" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="460" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Repos</text>
-      <text class="nx-num" style="animation-delay:550ms" x="460" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#7326f3">9</text>
+      <text class="nx-num" style="animation-delay:550ms" x="460" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#7326f3">10</text>
       <rect x="460" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
       <rect class="aura-bar" style="animation-delay:700ms" x="460" y="170" width="11" height="7" rx="3.5" fill="#7326f3" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:300ms">
@@ -164,7 +164,7 @@
       <rect x="656" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
       <rect class="aura-bar" style="animation-delay:800ms" x="656" y="170" width="11" height="7" rx="3.5" fill="#43d55c" opacity="0.9"/>
     </g>
-    <g class="nx-bar-rkt" transform="translate(79,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#1a85ff"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(400,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#2ad5ef"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(471,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#a371f7"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(667,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#43d55c"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g>
+    <g class="nx-bar-rkt" transform="translate(82,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#1a85ff"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(400,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#2ad5ef"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(471,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#a371f7"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(667,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#43d55c"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g>
     <rect x="0.5" y="0.5" width="859" height="243" rx="31.5" fill="none" stroke="#d7dee8" stroke-opacity="0.62"/>
   </g>
 </svg>
