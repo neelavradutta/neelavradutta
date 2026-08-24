@@ -94,6 +94,57 @@ function trimHero(svg) {
     .replace('d="M166 76 C246 50 330 50 410 77"', 'd="M166 70 C246 44 330 44 410 71"');
 }
 
+/** Drop the name-curve shine and add ambient motion away from the text block. */
+function stylizeHero(svg) {
+  svg = trimHero(svg);
+  const light = /github-dark-light/.test(svg);
+  const accent = light ? '#0069e0' : '#58a6ff';
+  const cyan = light ? '#0891b2' : '#2ad5ef';
+  const violet = '#a371f7';
+
+  svg = svg.replace(/[ \t]*<path class="nx-shine"[^>]*\/?>\r?\n?/g, '');
+  svg = svg.replace(/[ \t]*<path[^>]*d="M166 70 C246 44 330 44 410 71"[^>]*\/?>\r?\n?/g, '');
+  svg = svg.replace(/^\s*#[^\n]*\.nx-shine[^\n]*\r?\n/gm, '');
+  svg = svg.replace(/<g class="nx-hero-ambient">[\s\S]*?<\/g>\r?\n?/g, '');
+
+  const ambient = `
+    <g class="nx-hero-ambient">
+      <circle cx="96" cy="88" r="56" fill="none" stroke="${accent}" stroke-opacity="0.2" stroke-width="1.5" stroke-dasharray="4 10">
+        <animateTransform attributeName="transform" type="rotate" from="0 96 88" to="360 96 88" dur="26s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="96" cy="88" r="63" fill="none" stroke="${cyan}" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 12">
+        <animateTransform attributeName="transform" type="rotate" from="360 96 88" to="0 96 88" dur="34s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="714" cy="48" r="2.4" fill="${accent}" opacity="0.35">
+        <animate attributeName="opacity" values="0.2;0.85;0.2" dur="3.4s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="48;42;48" dur="5.8s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="762" cy="72" r="2" fill="${cyan}" opacity="0.3">
+        <animate attributeName="opacity" values="0.15;0.7;0.15" dur="2.9s" begin="0.7s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="762;770;762" dur="6.4s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="736" cy="104" r="1.8" fill="${violet}" opacity="0.28">
+        <animate attributeName="opacity" values="0.12;0.6;0.12" dur="3.8s" begin="1.2s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="104;98;104" dur="4.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="790" cy="56" r="1.5" fill="${accent}" opacity="0.22">
+        <animate attributeName="opacity" values="0.1;0.55;0.1" dur="4.2s" begin="0.4s" repeatCount="indefinite"/>
+        <animate attributeName="cx" values="790;782;790" dur="7s" repeatCount="indefinite"/>
+      </circle>
+      <rect x="46" y="167" width="90" height="2.5" rx="1.25" fill="${accent}" opacity="0.28">
+        <animate attributeName="x" values="46;724;46" dur="9s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.12;0.42;0.12" dur="9s" repeatCount="indefinite"/>
+      </rect>
+    </g>`;
+
+  if (svg.includes('<rect x="0.5" y="0.5"')) {
+    svg = svg.replace(/<rect x="0.5" y="0.5"/, `${ambient}\n    <rect x="0.5" y="0.5"`);
+  } else if (svg.includes('<rect x="26" y="26"')) {
+    svg = svg.replace(/(<rect x="26" y="26")/, `${ambient}\n    $1`);
+  }
+  return svg;
+}
+
 /** Insert / replace the profile location line under the hero name. */
 function injectHeroLocation(svg, location, light) {
   svg = svg.replace(/[ \t]*<text class="nx-location"[^>]*>[^<]*<\/text>\r?\n?/g, '');
@@ -561,7 +612,7 @@ function roundCorners(svg) {
 }
 
 const CUSTOMIZE = {
-  hero: (svg) => roundCorners(trimHero(svg)),
+  hero: (svg) => roundCorners(stylizeHero(svg)),
   stats: (svg) => roundCorners(revampStats(tightenStats(alignStatBoxes(shrinkStats(svg))), visitorCount)),
   stack: (svg) => roundCorners(brightenStackColors(trimStack(svg))),
   heatmap: (svg) => roundCorners(stylizeHeatmap(matchSectionTitle(svg))),
@@ -572,7 +623,7 @@ const CUSTOMIZE = {
  *
  * Rules: single axis (rise), 60–120ms sibling stagger, expo-out settles,
  * spring overshoot only on small focal elements (numbers, dots). No infinite
- * loops except the hero's slow dashed orbit; ambient life comes from the
+ * loops except subtle hero ambient motion; ambient life comes from the
  * background orbs GitSkins already ships. Only transform / opacity /
  * stroke-dashoffset are animated, so the palette never changes.
  *
@@ -589,7 +640,6 @@ function motionStyles(prefix) {
       #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
       #${prefix} .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
       #${prefix} .nx-location { animation: nx-fade 500ms ease-out 900ms both; }
-      #${prefix} .nx-shine { stroke-dasharray: 260; animation: nx-draw 1s cubic-bezier(0.16,1,0.3,1) 550ms both; }
       #${prefix} .nx-num { animation: nx-pop 700ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center bottom; }
       #${prefix} .nx-dot { animation: nx-pop 550ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center; }
       #${prefix} .aura-ring.nx-spin { animation: ${prefix}-ring 8s ease-in-out infinite, nx-spin 60s linear infinite; transform-box: fill-box; transform-origin: center; }
@@ -636,8 +686,7 @@ const ANIMATE = {
     .replace('<text x="166" y="116"', `<text clip-path="url(#${prefix}-namewipe)" x="166" y="116"`)
     .replace(' x="51" y="43" width="90"', ' class="nx-avatar" x="51" y="43" width="90"')
     .replace('<circle cx="96" cy="88" r="48"', '<circle class="nx-ring-draw" stroke-dashoffset="302" cx="96" cy="88" r="48"')
-    .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"')
-    .replace('<path d="M166 70 C246 44 330 44 410 71"', '<path class="nx-shine" stroke-dashoffset="260" d="M166 70 C246 44 330 44 410 71"'),
+    .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"'),
 
   stats: (svg) => {
     svg = svg
@@ -1044,6 +1093,22 @@ async function refreshConnect() {
 }
 
 await mkdir(OUT_DIR, { recursive: true });
+
+if (process.argv.includes('--local-hero')) {
+  for (const name of ['hero.svg', 'hero-light.svg']) {
+    const path = `${OUT_DIR}/${name}`;
+    let svg = await readFile(path, 'utf8');
+    svg = CUSTOMIZE.hero(svg);
+    if (!svg.includes('.nx-in {')) svg = addMotion(svg, 'hero');
+    if (/<path[^>]*class="nx-shine"/.test(svg) || /d="M166 70 C246 44 330 44 410 71"/.test(svg)) {
+      throw new Error(`${name}: name-curve shine was not removed`);
+    }
+    if (!svg.includes('nx-hero-ambient')) throw new Error(`${name}: ambient layer was not applied`);
+    await writeFile(path, svg);
+    console.log('restyled', name);
+  }
+  process.exit(0);
+}
 
 if (process.argv.includes('--local-heatmap')) {
   for (const name of ['heatmap.svg', 'heatmap-light.svg']) {
