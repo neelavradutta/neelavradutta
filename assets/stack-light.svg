@@ -87,7 +87,8 @@
       #gs-stack-neelavradutta-github-dark-light .aura-ring-b.nx-spin-rev { animation: gs-stack-neelavradutta-github-dark-light-ring 10s ease-in-out infinite 1.6s, nx-spin-rev 45s linear infinite; transform-box: fill-box; transform-origin: center; }
       #gs-stack-neelavradutta-github-dark-light g.aura-chip { animation: nx-card 800ms cubic-bezier(0.22,1,0.36,1) both; transition: filter 240ms ease; cursor: pointer; }
       #gs-stack-neelavradutta-github-dark-light g.aura-chip:hover { filter: brightness(1.1) drop-shadow(0 10px 16px rgba(88,166,255,0.28)); }
-      #gs-stack-neelavradutta-github-dark-light .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both; transition: filter 220ms ease; }
+      #gs-stack-neelavradutta-github-dark-light g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }
+      #gs-stack-neelavradutta-github-dark-light .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both, nx-burn 2.4s ease-in-out 1.2s infinite; transition: filter 220ms ease; }
       #gs-stack-neelavradutta-github-dark-light g.aura-chip:hover .aura-bar { filter: brightness(1.2); }
       #gs-stack-neelavradutta-github-dark-light .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }
       #gs-stack-neelavradutta-github-dark-light .nx-hero-flame { animation: nx-hero-flame 180ms ease-in-out infinite; transform-box: fill-box; transform-origin: right center; }
@@ -108,6 +109,7 @@
       @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }
       @keyframes nx-hero-flame { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(1.22); } }
       @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }
+      @keyframes nx-burn { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.28); } }
     }
   </style>
   <g id="gs-stack-neelavradutta-github-dark-light" clip-path="url(#gs-stack-neelavradutta-github-dark-light-round)">
@@ -123,27 +125,27 @@
     <g class="aura-chip" style="animation-delay:0ms">
       <circle class="nx-dot" style="animation-delay:250ms" cx="54" cy="107" r="5" fill="#3B9EFF"/>
       <text x="72" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">TypeScript</text>
-      <text class="nx-fade" style="animation-delay:650ms" x="306" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#3B9EFF" text-anchor="end">63%</text>
+      <text class="nx-fade" style="animation-delay:650ms" x="306" y="112" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#3B9EFF" text-anchor="end">61%</text>
       <rect x="330" y="98" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
-      <rect class="aura-bar" style="animation-delay:400ms" x="330" y="98" width="294" height="9" rx="4.5" fill="#3B9EFF" opacity="0.95"/>
+      <rect class="aura-bar" style="animation-delay:400ms" x="330" y="98" width="284" height="9" rx="4.5" fill="#3B9EFF" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:95ms">
       <circle class="nx-dot" style="animation-delay:345ms" cx="54" cy="139" r="5" fill="#FF4D9A"/>
       <text x="72" y="144" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">Python</text>
-      <text class="nx-fade" style="animation-delay:745ms" x="306" y="144" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FF4D9A" text-anchor="end">13%</text>
+      <text class="nx-fade" style="animation-delay:745ms" x="306" y="144" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FF4D9A" text-anchor="end">12%</text>
       <rect x="330" y="130" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
-      <rect class="aura-bar" style="animation-delay:495ms" x="330" y="130" width="61" height="9" rx="4.5" fill="#FF4D9A" opacity="0.95"/>
+      <rect class="aura-bar" style="animation-delay:495ms" x="330" y="130" width="56" height="9" rx="4.5" fill="#FF4D9A" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:190ms">
       <circle class="nx-dot" style="animation-delay:440ms" cx="54" cy="171" r="5" fill="#FFD60A"/>
       <text x="72" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">CSS</text>
-      <text class="nx-fade" style="animation-delay:840ms" x="306" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FFD60A" text-anchor="end">11%</text>
+      <text class="nx-fade" style="animation-delay:840ms" x="306" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#FFD60A" text-anchor="end">10%</text>
       <rect x="330" y="162" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
-      <rect class="aura-bar" style="animation-delay:590ms" x="330" y="162" width="51" height="9" rx="4.5" fill="#FFD60A" opacity="0.95"/>
+      <rect class="aura-bar" style="animation-delay:590ms" x="330" y="162" width="47" height="9" rx="4.5" fill="#FFD60A" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:285ms">
       <circle class="nx-dot" style="animation-delay:535ms" cx="54" cy="203" r="5" fill="#2EE6A6"/>
       <text x="72" y="208" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">JavaScript</text>
-      <text class="nx-fade" style="animation-delay:935ms" x="306" y="208" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#2EE6A6" text-anchor="end">5%</text>
+      <text class="nx-fade" style="animation-delay:935ms" x="306" y="208" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="850" fill="#2EE6A6" text-anchor="end">9%</text>
       <rect x="330" y="194" width="466" height="9" rx="4.5" fill="rgba(255,255,255,0.12)"/>
-      <rect class="aura-bar" style="animation-delay:685ms" x="330" y="194" width="23" height="9" rx="4.5" fill="#2EE6A6" opacity="0.95"/>
+      <rect class="aura-bar" style="animation-delay:685ms" x="330" y="194" width="42" height="9" rx="4.5" fill="#2EE6A6" opacity="0.95"/>
     </g><g class="aura-chip" style="animation-delay:380ms">
       <circle class="nx-dot" style="animation-delay:630ms" cx="54" cy="235" r="5" fill="#FF6B35"/>
       <text x="72" y="240" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" font-weight="800" fill="#0f172a">Kotlin</text>

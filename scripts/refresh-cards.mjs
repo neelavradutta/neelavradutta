@@ -109,12 +109,6 @@ function stylizeHero(svg) {
 
   const ambient = `
     <g class="nx-hero-ambient">
-      <circle cx="96" cy="88" r="56" fill="none" stroke="${accent}" stroke-opacity="0.2" stroke-width="1.5" stroke-dasharray="4 10">
-        <animateTransform attributeName="transform" type="rotate" from="0 96 88" to="360 96 88" dur="26s" repeatCount="indefinite"/>
-      </circle>
-      <circle cx="96" cy="88" r="63" fill="none" stroke="${cyan}" stroke-opacity="0.12" stroke-width="1" stroke-dasharray="2 12">
-        <animateTransform attributeName="transform" type="rotate" from="360 96 88" to="0 96 88" dur="34s" repeatCount="indefinite"/>
-      </circle>
       <circle cx="714" cy="48" r="2.4" fill="${accent}" opacity="0.35">
         <animate attributeName="opacity" values="0.2;0.85;0.2" dur="3.4s" repeatCount="indefinite"/>
         <animate attributeName="cy" values="48;42;48" dur="5.8s" repeatCount="indefinite"/>
@@ -637,7 +631,7 @@ function motionStyles(prefix) {
       #${prefix} .nx-in-2 { animation-delay: 120ms; }
       #${prefix} .nx-fade { animation: nx-fade 500ms ease-out both; }
       #${prefix} .nx-avatar { animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both; transform-box: fill-box; transform-origin: center; }
-      #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both, nx-spin 24s linear 1.15s infinite; transform-box: fill-box; transform-origin: center; }
       #${prefix} .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
       #${prefix} .nx-location { animation: nx-fade 500ms ease-out 900ms both; }
       #${prefix} .nx-num { animation: nx-pop 700ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center bottom; }

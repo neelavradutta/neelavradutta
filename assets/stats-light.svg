@@ -51,7 +51,6 @@
       <stop offset="100%" stop-color="#0f172a"/>
       <animateTransform attributeName="gradientTransform" type="rotate" from="0 0.5 0.5" to="360 0.5 0.5" dur="8s" repeatCount="indefinite"/>
     </linearGradient>
-    <clipPath id="gs-stats-neelavradutta-github-dark-light-round"><rect width="860" height="244" rx="32" ry="32"/></clipPath>
   
     <symbol id="gs-stats-neelavradutta-github-dark-light-srt" overflow="visible">
       <path d="M-2.1 0.9L-3.4 3.6L-2 2.5Z"/>
@@ -62,6 +61,7 @@
       <path d="M-1 3.5L0 6.4 1 3.5Z" fill="#ff6b35"/>
       <path d="M-0.5 3.5L0 5.2 .5 3.5Z" fill="#ffd60a"/>
     </symbol>
+    <clipPath id="gs-stats-neelavradutta-github-dark-light-round"><rect width="860" height="244" rx="32" ry="32"/></clipPath>
   </defs>
   <style>
     #gs-stats-neelavradutta-github-dark-light .aura-orb-a { animation: gs-stats-neelavradutta-github-dark-light-float-a 9s ease-in-out infinite; }
@@ -81,6 +81,12 @@
     @keyframes gs-stats-neelavradutta-github-dark-light-chip { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes gs-stats-neelavradutta-github-dark-light-cursor { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
     @keyframes gs-stats-neelavradutta-github-dark-light-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+      #gs-stats-neelavradutta-github-dark-light g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }
+      #gs-stats-neelavradutta-github-dark-light .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both, nx-burn 2.4s ease-in-out 1.2s infinite; }
+      #gs-stats-neelavradutta-github-dark-light .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }
+      @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }
+      @keyframes nx-burn { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.28); } }
+      @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }
 
     @media (prefers-reduced-motion: no-preference) {
       #gs-stats-neelavradutta-github-dark-light .nx-in { animation: nx-in 700ms cubic-bezier(0.16,1,0.3,1) both; }
@@ -97,7 +103,8 @@
       #gs-stats-neelavradutta-github-dark-light .aura-ring-b.nx-spin-rev { animation: gs-stats-neelavradutta-github-dark-light-ring 10s ease-in-out infinite 1.6s, nx-spin-rev 45s linear infinite; transform-box: fill-box; transform-origin: center; }
       #gs-stats-neelavradutta-github-dark-light g.aura-chip { animation: nx-card 800ms cubic-bezier(0.22,1,0.36,1) both; transition: filter 240ms ease; cursor: pointer; }
       #gs-stats-neelavradutta-github-dark-light g.aura-chip:hover { filter: brightness(1.1) drop-shadow(0 10px 16px rgba(88,166,255,0.28)); }
-      #gs-stats-neelavradutta-github-dark-light .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both; transition: filter 220ms ease; }
+      #gs-stats-neelavradutta-github-dark-light g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }
+      #gs-stats-neelavradutta-github-dark-light .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both, nx-burn 2.4s ease-in-out 1.2s infinite; transition: filter 220ms ease; }
       #gs-stats-neelavradutta-github-dark-light g.aura-chip:hover .aura-bar { filter: brightness(1.2); }
       #gs-stats-neelavradutta-github-dark-light .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }
       #gs-stats-neelavradutta-github-dark-light .nx-hero-flame { animation: nx-hero-flame 180ms ease-in-out infinite; transform-box: fill-box; transform-origin: right center; }
@@ -118,56 +125,46 @@
       @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }
       @keyframes nx-hero-flame { 0%,100% { transform: scaleX(1); } 50% { transform: scaleX(1.22); } }
       @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }
-    }
-      #gs-stats-neelavradutta-github-dark-light g.aura-chip > rect:first-of-type { animation: nx-glow 4.2s ease-in-out 1.4s infinite; }
-      @keyframes nx-glow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.38); } }
-      #gs-stats-neelavradutta-github-dark-light .aura-bar { animation: nx-bar 1s cubic-bezier(0.16,1,0.3,1) both, nx-burn 2.4s ease-in-out 1.2s infinite; }
-      #gs-stats-neelavradutta-github-dark-light .nx-flm { animation: nx-flicker 280ms ease-in-out infinite; transform-box: fill-box; transform-origin: center top; }
       @keyframes nx-burn { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.28); } }
-      @keyframes nx-flicker { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.28); } }
+    }
   </style>
   <g id="gs-stats-neelavradutta-github-dark-light" clip-path="url(#gs-stats-neelavradutta-github-dark-light-round)">
-    <rect width="860" height="244" rx="32" fill="#f6f8fc"/>
+    <rect width="860" height="244" rx="32" fill="url(#gs-stats-neelavradutta-github-dark-light-bg)"/>
     
     <ellipse class="aura-orb-a" cx="138" cy="47" rx="206" ry="120" fill="url(#gs-stats-neelavradutta-github-dark-light-orb-0)"/>
     <ellipse class="aura-orb-b" cx="654" cy="57" rx="241" ry="109" fill="url(#gs-stats-neelavradutta-github-dark-light-orb-1)"/>
     <ellipse class="aura-orb-c" cx="499" cy="229" rx="310" ry="88" fill="url(#gs-stats-neelavradutta-github-dark-light-orb-2)"/>
     <ellipse class="aura-orb-b" cx="826" cy="203" rx="172" ry="109" fill="url(#gs-stats-neelavradutta-github-dark-light-orb-3)"/>
     
-    <rect x="28" y="26" width="804" height="190" rx="28" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
+    <rect x="28" y="26" width="804" height="190" rx="28" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.48"/>
     <text class="nx-in" x="46" y="61" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="24" font-weight="850" letter-spacing="-0.4" fill="#0f172a">GitHub Stats</text>
     <text class="nx-in nx-in-2" x="48" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="650" letter-spacing="1.2" fill="#475569"></text>
     <g class="aura-chip" style="animation-delay:0ms">
-      <rect x="46" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
+      <rect x="46" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="68" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Visitors</text>
-      <text class="nx-num" x="68" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#1a85ff">7</text>
+      <text class="nx-num" style="animation-delay:350ms" x="68" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#1a85ff">40</text>
       <rect x="68" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
-      <rect class="aura-bar" style="animation-delay:500ms" x="68" y="170" width="11" height="7" rx="3.5" fill="#1a85ff" opacity="0.9"/>
+      <rect class="aura-bar" style="animation-delay:500ms" x="68" y="170" width="16" height="7" rx="3.5" fill="#1a85ff" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:100ms">
-      <rect x="242" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
+      <rect x="242" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="264" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Contributions</text>
-      <text class="nx-num" x="264" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#2ad5ef">302</text>
+      <text class="nx-num" style="animation-delay:450ms" x="264" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#2ad5ef">346</text>
       <rect x="264" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
       <rect class="aura-bar" style="animation-delay:600ms" x="264" y="170" width="136" height="7" rx="3.5" fill="#2ad5ef" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:200ms">
-      <rect x="438" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
+      <rect x="438" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="460" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Repos</text>
-      <text class="nx-num" x="460" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#7326f3">9</text>
+      <text class="nx-num" style="animation-delay:550ms" x="460" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#7326f3">10</text>
       <rect x="460" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
       <rect class="aura-bar" style="animation-delay:700ms" x="460" y="170" width="11" height="7" rx="3.5" fill="#7326f3" opacity="0.9"/>
     </g><g class="aura-chip" style="animation-delay:300ms">
-      <rect x="634" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.55"/>
+      <rect x="634" y="76" width="180" height="122" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-opacity="0.72"/>
       <text x="656" y="110" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="13" font-weight="800" letter-spacing="1.4" fill="#475569">Followers</text>
-      <text class="nx-num" x="656" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#43d55c">3</text>
+      <text class="nx-num" style="animation-delay:650ms" x="656" y="146" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="900" letter-spacing="-0.8" fill="#43d55c">2</text>
       <rect x="656" y="170" width="136" height="7" rx="3.5" fill="rgba(15,23,42,0.08)"/>
       <rect class="aura-bar" style="animation-delay:800ms" x="656" y="170" width="11" height="7" rx="3.5" fill="#43d55c" opacity="0.9"/>
     </g>
-    
-    
-    
-    
-    
-    <g class="nx-bar-rkt" transform="translate(79,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#1a85ff"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(400,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#2ad5ef"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(471,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#a371f7"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(667,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#43d55c"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g>
+    <g class="nx-bar-rkt" transform="translate(84,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#1a85ff"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(400,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#2ad5ef"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(471,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#a371f7"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g><g class="nx-bar-rkt" transform="translate(667,173.5) rotate(90)"><use href="#gs-stats-neelavradutta-github-dark-light-srt" xlink:href="#gs-stats-neelavradutta-github-dark-light-srt" fill="#43d55c"/><use class="nx-flm" href="#gs-stats-neelavradutta-github-dark-light-sfl" xlink:href="#gs-stats-neelavradutta-github-dark-light-sfl"/></g>
     <rect x="0.5" y="0.5" width="859" height="243" rx="31.5" fill="none" stroke="#d7dee8" stroke-opacity="0.62"/>
   </g>
 </svg>
