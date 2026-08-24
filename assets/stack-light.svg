@@ -77,7 +77,8 @@
       #gs-stack-neelavradutta-github-dark-light .nx-in-2 { animation-delay: 120ms; }
       #gs-stack-neelavradutta-github-dark-light .nx-fade { animation: nx-fade 500ms ease-out both; }
       #gs-stack-neelavradutta-github-dark-light .nx-avatar { animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both; transform-box: fill-box; transform-origin: center; }
-      #gs-stack-neelavradutta-github-dark-light .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both, nx-spin 24s linear 1.15s infinite; transform-box: fill-box; transform-origin: center; }
+      #gs-stack-neelavradutta-github-dark-light .nx-ring-spin { animation: nx-spin 3s linear 1.15s infinite; transform-origin: 96px 88px; }
+      #gs-stack-neelavradutta-github-dark-light .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
       #gs-stack-neelavradutta-github-dark-light .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
       #gs-stack-neelavradutta-github-dark-light .nx-location { animation: nx-fade 500ms ease-out 900ms both; }
       #gs-stack-neelavradutta-github-dark-light .nx-num { animation: nx-pop 700ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center bottom; }
