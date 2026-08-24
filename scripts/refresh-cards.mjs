@@ -631,7 +631,7 @@ function motionStyles(prefix) {
       #${prefix} .nx-in-2 { animation-delay: 120ms; }
       #${prefix} .nx-fade { animation: nx-fade 500ms ease-out both; }
       #${prefix} .nx-avatar { animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both; transform-box: fill-box; transform-origin: center; }
-      #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both, nx-spin 24s linear 1.15s infinite; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
       #${prefix} .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
       #${prefix} .nx-location { animation: nx-fade 500ms ease-out 900ms both; }
       #${prefix} .nx-num { animation: nx-pop 700ms cubic-bezier(0.34,1.56,0.64,1) both; transform-box: fill-box; transform-origin: center bottom; }
@@ -679,7 +679,8 @@ const ANIMATE = {
     .replace('</defs>', `  <clipPath id="${prefix}-namewipe"><rect x="166" y="64" width="0" height="66"><animate attributeName="width" values="0;520" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" begin="0.35s" dur="0.9s" fill="freeze"/></rect></clipPath>\n  </defs>`)
     .replace('<text x="166" y="116"', `<text clip-path="url(#${prefix}-namewipe)" x="166" y="116"`)
     .replace(' x="51" y="43" width="90"', ' class="nx-avatar" x="51" y="43" width="90"')
-    .replace('<circle cx="96" cy="88" r="48"', '<circle class="nx-ring-draw" stroke-dashoffset="302" cx="96" cy="88" r="48"')
+    .replace('<circle cx="96" cy="88" r="48"', '<g class="nx-ring-spin"><animateTransform attributeName="transform" type="rotate" from="0 96 88" to="360 96 88" dur="0.5s" begin="1.15s" repeatCount="indefinite"/><circle class="nx-ring-draw" stroke-dashoffset="302" cx="96" cy="88" r="48"')
+    .replace(/(<circle class="nx-ring-draw"[^>]*\/>)/, '$1</g>')
     .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"'),
 
   stats: (svg) => {
