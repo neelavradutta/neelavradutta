@@ -631,6 +631,7 @@ function motionStyles(prefix) {
       #${prefix} .nx-in-2 { animation-delay: 120ms; }
       #${prefix} .nx-fade { animation: nx-fade 500ms ease-out both; }
       #${prefix} .nx-avatar { animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both; transform-box: fill-box; transform-origin: center; }
+      #${prefix} .nx-ring-spin { animation: nx-spin 3s linear 1.15s infinite; transform-origin: 96px 88px; }
       #${prefix} .nx-ring-draw { stroke-dasharray: 302; animation: nx-scale-in 650ms cubic-bezier(0.16,1,0.3,1) 60ms both, nx-draw 950ms cubic-bezier(0.16,1,0.3,1) 200ms both; transform-box: fill-box; transform-origin: center; }
       #${prefix} .nx-handle { animation: nx-handle 900ms cubic-bezier(0.16,1,0.3,1) 250ms both; }
       #${prefix} .nx-location { animation: nx-fade 500ms ease-out 900ms both; }
@@ -673,15 +674,34 @@ function staggered(svg, pattern, insert, base, step) {
   return svg.replace(pattern, (...match) => insert(match, `style="animation-delay:${base + index++ * step}ms"`));
 }
 
+function heroRingDefs(prefix, light) {
+  const base = light ? '#0069e0' : '#58a6ff';
+  const hot = light ? '#6bb8ff' : '#c8e4ff';
+  return `
+    <linearGradient id="${prefix}-ring-stroke" gradientUnits="userSpaceOnUse" x1="48" y1="88" x2="144" y2="88">
+      <stop offset="0%" stop-color="${base}" stop-opacity="0.78"/>
+      <stop offset="20%" stop-color="${hot}" stop-opacity="1"/>
+      <stop offset="42%" stop-color="${base}" stop-opacity="0.82"/>
+      <stop offset="100%" stop-color="${base}" stop-opacity="0.92"/>
+    </linearGradient>
+    <filter id="${prefix}-ring-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.6" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>`;
+}
+
 const ANIMATE = {
-  hero: (svg, prefix) => svg
+  hero: (svg, prefix) => {
+    const light = /-light$/.test(prefix) || /github-dark-light/.test(prefix);
+    const ringDefs = heroRingDefs(prefix, light);
+    return svg
     // Name reveals through a left-to-right wipe, timed with the arc drawing above it.
-    .replace('</defs>', `  <clipPath id="${prefix}-namewipe"><rect x="166" y="64" width="0" height="66"><animate attributeName="width" values="0;520" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" begin="0.35s" dur="0.9s" fill="freeze"/></rect></clipPath>\n  </defs>`)
+    .replace('</defs>', `${ringDefs}\n  <clipPath id="${prefix}-namewipe"><rect x="166" y="64" width="0" height="66"><animate attributeName="width" values="0;520" keyTimes="0;1" calcMode="spline" keySplines="0.16 1 0.3 1" begin="0.35s" dur="0.9s" fill="freeze"/></rect></clipPath>\n  </defs>`)
     .replace('<text x="166" y="116"', `<text clip-path="url(#${prefix}-namewipe)" x="166" y="116"`)
     .replace(' x="51" y="43" width="90"', ' class="nx-avatar" x="51" y="43" width="90"')
-    .replace('<circle cx="96" cy="88" r="48"', '<g class="nx-ring-spin"><animateTransform attributeName="transform" type="rotate" from="0 96 88" to="360 96 88" dur="0.5s" begin="1.15s" repeatCount="indefinite"/><circle class="nx-ring-draw" stroke-dashoffset="302" cx="96" cy="88" r="48"')
-    .replace(/(<circle class="nx-ring-draw"[^>]*\/>)/, '$1</g>')
-    .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"'),
+    .replace(/<circle cx="96" cy="88" r="48"[^>]*\/>/, `<g class="nx-ring-spin" filter="url(#${prefix}-ring-glow)"><circle class="nx-ring-draw" stroke="url(#${prefix}-ring-stroke)" stroke-dashoffset="302" cx="96" cy="88" r="48" fill="rgba(255,255,255,0.06)" stroke-width="2.75"/></g>`)
+    .replace('<text x="166" y="63"', '<text class="nx-handle" x="166" y="63"');
+  },
 
   stats: (svg) => {
     svg = svg
