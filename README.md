@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <picture><source media="(prefers-color-scheme: light)" srcset="assets/about-light.svg" /><img src="assets/about.svg" alt="Full-Stack Developer skilled in Python, FastAPI, Next.js, React, MySQL, and Computer Vision. Passionate about AI-powered applications and scalable software." width="860" /></picture>
+  <picture><source media="(prefers-color-scheme: light)" srcset="assets/about-light.svg" /><img src="assets/about.svg" alt="Full-Stack Developer skilled in Python, FastAPI, MySQL, and Computer Vision. Passionate about AI-powered applications and scalable software." width="860" /></picture>
 </p>
 <p align="center">
   <picture><source media="(prefers-color-scheme: light)" srcset="assets/stack-light.svg" /><img src="assets/stack.svg" alt="Language stack" width="860" /></picture>
